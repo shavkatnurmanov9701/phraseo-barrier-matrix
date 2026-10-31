@@ -152,6 +152,7 @@ function bookHtml() {
           <a class="link" href="#/kitob">${t('w.aboutBook')} ${icon('arrow-right', 14)}</a>
         <span class="turn-hint">${t('w.contents')} ${icon('arrow-right', 14)}</span>
       </div>
+      <div class="leaf-back" aria-hidden="true"></div>
     </div>
     <div class="book-cover" role="button" tabindex="0" aria-controls="book" aria-label="${esc(t('w.openBook'))}" data-book-toggle>
       <div class="face front"><img src="img/cover.webp" width="800" height="1132" alt="“Phraseo-Barrier Matrix” — ${esc(BOOK.author)}"><span class="open-hint">${icon('book-open', 15)} ${t('w.openBook')}</span></div>

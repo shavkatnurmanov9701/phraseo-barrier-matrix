@@ -643,3 +643,24 @@ button.type[aria-pressed="true"] .type-card { box-shadow: 0 0 0 4px #fff, 0 0 0 
   .f5 { display: none; }
   .book-stage { display: flex !important; flex-direction: column; align-items: center; }
 }
+
+/* Sahifalar bir tekislikda "miltillab" yo‘qolmasligi uchun har biriga alohida chuqurlik (translateZ) */
+.book-page.right { transform: translateZ(0); }
+.book-cover { transform: translateZ(2px) rotateY(calc(-178deg * var(--o))); }
+.leaf-back { display: none; }
+@media (max-width: 760px) {
+  .book-cover { transform: translateZ(3px) rotateY(calc(-178deg * var(--o))); }
+  /* Varaqlangan sahifa yo‘qolmaydi: orqa tomoni qog‘oz bo‘lib chap tomonda yotadi */
+  .info-leaf { transform-style: preserve-3d; backface-visibility: visible; -webkit-backface-visibility: visible; background: transparent; box-shadow: none;
+    transform: translateZ(1.5px) rotateY(0); }
+  .book[data-leaf="2"] .info-leaf { transform: translateZ(1.5px) rotateY(-172deg); }
+  .info-leaf > .page-inner { position: absolute; inset: 0; background: #fff; border-radius: 3px 14px 14px 3px; backface-visibility: hidden; -webkit-backface-visibility: hidden;
+    box-shadow: 3px 0 0 #EEEBFA, 6px 0 0 #E1DCF6, 0 30px 50px -24px rgb(20 6 90 / .6); }
+  .leaf-back { display: block; position: absolute; inset: 0; border-radius: 14px 3px 3px 14px; transform: rotateY(180deg); backface-visibility: hidden; -webkit-backface-visibility: hidden;
+    background: repeating-linear-gradient(#fff 0 18px, #EEF0FA 18px 19px); box-shadow: -3px 0 0 #EEEBFA, -6px 0 0 #E1DCF6; }
+  .info-leaf::before { z-index: 1; }
+  .book-cover { transform: translateZ(3px) rotateY(calc(-172deg * var(--o))); }
+  .face.back { display: block; background: repeating-linear-gradient(#fff 0 18px, #EEF0FA 18px 19px); border-radius: 14px 3px 3px 14px; }
+  .face.back > .page-inner { visibility: hidden; }
+  .face.back::after { display: block; }
+}
