@@ -46,5 +46,9 @@ Every push to `main` goes live in 1–2 minutes, so test locally first (`python3
 ## Stages
 1. ✅ Structure and design (EnNote style)
 2. ✅ Pilot lesson 1: interactive exercises (`js/practice.js`, data in `js/data/practice/l01.js`, registry `index.js`)
-3. ⏳ Remaining lessons, story texts from the posters
+3. ✅ All 19 lessons interactive (2026-11-01): data in `js/data/practice/set_a.js` (2–7), `set_b.js` (8–13), `set_c.js` (14–19),
+   helpers in `kit.js`. Warm-up = book warm-up picture (`img/warmup/NN.webp`) + “Guess the Meaning” match (5 glossary items).
+   Extra kinds: `reorder` (tap words to build a sentence), `match` with `ordered: true` (number events), gap items may carry a note
+   (used for “rewrite” tasks). Book answer-key errors were fixed and listed in comments next to the data.
+   Validate with a script before pushing: every gap answer is in its bank, one `___` per gap item, unique match answers.
 4. ⏳ Uzbek equivalents in the glossary, flashcards, quizzes

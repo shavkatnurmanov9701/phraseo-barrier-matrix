@@ -75,9 +75,9 @@ export function idiomMatcher(terms) {
 }
 
 /* ---------- Umumiy qobiq ---------- */
-const KIND_TYPE = { match: 'match', gap: 'gap', tf: 'tf', mcq: 'mcq', hunt: 'hunt', sentences: 'write', essay: 'write' };
-const KIND_ICON = { match: 'shuffle', gap: 'text-cursor-input', tf: 'square-check-big', mcq: 'list-checks', hunt: 'search', sentences: 'pen-line', essay: 'file-text' };
-const CHECKABLE = new Set(['match', 'gap', 'tf', 'mcq', 'hunt']);
+const KIND_TYPE = { reorder: 'order', match: 'match', gap: 'gap', tf: 'tf', mcq: 'mcq', hunt: 'hunt', sentences: 'write', essay: 'write' };
+const KIND_ICON = { reorder: 'arrow-up-down', match: 'shuffle', gap: 'text-cursor-input', tf: 'square-check-big', mcq: 'list-checks', hunt: 'search', sentences: 'pen-line', essay: 'file-text' };
+const CHECKABLE = new Set(['match', 'gap', 'tf', 'mcq', 'hunt', 'reorder']);
 
 function shell(ex, num, body, color) {
   const checkable = CHECKABLE.has(ex.kind);
@@ -85,12 +85,13 @@ function shell(ex, num, body, color) {
     <div class="ex-head">
       <span class="tile sm soft">${icon(KIND_ICON[ex.kind], 19)}</span>
       <div class="ex-title">
-        <p class="eyebrow ex-eyebrow">${num ? `${num} · ` : ''}${esc(pick(ACTIVITY_TYPES[KIND_TYPE[ex.kind]]))}</p>
+        <p class="eyebrow ex-eyebrow">${num ? `${num} · ` : ''}${esc(pick(ACTIVITY_TYPES[ex.ordered ? 'order' : KIND_TYPE[ex.kind]]))}</p>
         <h3 lang="en">${esc(ex.title)}</h3>
       </div>
       <span class="ex-badge" data-badge></span>
     </div>
     <p class="ex-instr">${esc(pick(ex.instructions))}</p>
+    ${ex.image && ex.kind !== 'essay' ? `<img class="ex-img" src="${ex.image}" alt="" loading="lazy">` : ''}
     <div class="ex-body">${body}</div>
     ${checkable ? `<div class="ex-foot">
       <button class="btn primary" type="button" data-check disabled>${icon('check', 17)} ${t('ex.check')}</button>
@@ -104,7 +105,7 @@ const markIcon = (ok) => `<span class="mk ${ok ? 'ok' : 'no'}" aria-label="${ok 
 
 /* ---------- Har bir mashq turi: HTML ---------- */
 function bodyMatch(ex, seed) {
-  const opts = seededShuffle(ex.pairs.map((p) => p[1]), seed);
+  const opts = ex.ordered ? ex.pairs.map((p) => p[1]).sort((a, b) => Number(a) - Number(b)) : seededShuffle(ex.pairs.map((p) => p[1]), seed);
   return `<ul class="ex-list">${ex.pairs.map(([left], i) => `<li class="match-row" data-i="${i}">
       <span class="match-left" lang="en">${esc(left)}</span>
       <span class="match-arrow" aria-hidden="true">${icon('arrow-right', 16)}</span>
@@ -116,9 +117,9 @@ function bodyMatch(ex, seed) {
 function bodyGap(ex, seed) {
   const opts = seededShuffle(ex.bank, seed);
   return `<div class="bank" lang="en" aria-label="Word bank">${opts.map((o) => `<span class="bank-chip">${esc(o)}</span>`).join('')}</div>
-    <ol class="ex-list numbered">${ex.items.map(([text], i) => {
+    <ol class="ex-list numbered">${ex.items.map(([text, , note], i) => {
       const [a, b] = text.split('___');
-      return `<li class="gap-row" data-i="${i}" lang="en"><span>${esc(a)}</span><select class="ex-select gap" aria-label="Gap ${i + 1}" data-sel><option value="">${t('ex.choose')}</option>${opts.map((o) => `<option value="${esc(o)}">${esc(o)}</option>`).join('')}</select><span>${esc(b)}</span><span data-mk></span><span class="fix" data-fix hidden></span></li>`;
+      return `<li class="gap-row" data-i="${i}" lang="en">${note ? `<span class="gap-note">${esc(note)}</span>` : ''}<span>${esc(a)}</span><select class="ex-select gap" aria-label="Gap ${i + 1}" data-sel><option value="">${t('ex.choose')}</option>${opts.map((o) => `<option value="${esc(o)}">${esc(o)}</option>`).join('')}</select><span>${esc(b)}</span><span data-mk></span><span class="fix" data-fix hidden></span></li>`;
     }).join('')}</ol>`;
 }
 
@@ -157,6 +158,19 @@ function bodyHunt(ex, seed) {
     </li>`).join('')}</ol>`;
 }
 
+function bodyReorder(ex, seed) {
+  return `<ol class="ex-list numbered">${ex.items.map((sentence, i) => {
+    const words = sentence.split(/\s+/);
+    const pool = seededShuffle(words.map((w, k) => ({ w, k })), `${seed}-${i}`);
+    return `<li class="ro-row" data-i="${i}" data-built="">
+      <div class="ro-built" lang="en" aria-label="${esc(t('ex.yourSentence'))}"><span class="ro-ph">${t('ex.tapOrder')}</span></div>
+      <div class="ro-pool" lang="en">${pool.map(({ w, k }) => `<button type="button" class="ro-w" data-k="${k}">${esc(w)}</button>`).join('')}</div>
+      <span data-mk></span>
+      <span class="fix" data-fix hidden></span>
+    </li>`;
+  }).join('')}</ol>`;
+}
+
 function bodySentences(ex, n) {
   const saved = readDraft(n, ex.id) || [];
   return `<ol class="ex-list">${ex.items.map(([idiom, example], i) => `<li class="sent-row" data-i="${i}">
@@ -185,12 +199,12 @@ function bodyEssay(ex, n) {
     <p class="hint">${t('ex.autosave')}</p>`;
 }
 
-const COLORS = { match: '#7C3AED', gap: '#2563EB', tf: '#0EA5B7', mcq: '#4F46E5', hunt: '#D97706', sentences: '#059669', essay: '#DB2777' };
+const COLORS = { reorder: '#0E9F6E', match: '#7C3AED', gap: '#2563EB', tf: '#0EA5B7', mcq: '#4F46E5', hunt: '#D97706', sentences: '#059669', essay: '#DB2777' };
 
 export function renderExercise(ex, num, lessonN) {
   const seed = `${lessonN}-${ex.id}`;
   const body = {
-    match: () => bodyMatch(ex, seed), gap: () => bodyGap(ex, seed), tf: () => bodyTF(ex), mcq: () => bodyMCQ(ex),
+    reorder: () => bodyReorder(ex, seed), match: () => bodyMatch(ex, seed), gap: () => bodyGap(ex, seed), tf: () => bodyTF(ex), mcq: () => bodyMCQ(ex),
     hunt: () => bodyHunt(ex, seed), sentences: () => bodySentences(ex, lessonN), essay: () => bodyEssay(ex, lessonN),
   }[ex.kind]();
   return shell(ex, num, body, COLORS[ex.kind]);
@@ -214,6 +228,18 @@ function badge(card, data) {
   } else { b.className = 'ex-badge'; b.innerHTML = ''; }
 }
 
+const builtOf = (row) => (row.dataset.built ? row.dataset.built.split(',').map(Number) : []);
+function drawBuilt(row) {
+  const built = builtOf(row);
+  const box = row.querySelector('.ro-built');
+  const words = [...row.querySelectorAll('.ro-w')];
+  const byK = (k) => words.find((w) => Number(w.dataset.k) === k);
+  box.innerHTML = built.length
+    ? built.map((k, pos) => `<button type="button" class="ro-b" data-pos="${pos}">${esc(byK(k).textContent)}</button>`).join('')
+    : `<span class="ro-ph">${t('ex.tapOrder')}</span>`;
+  words.forEach((w) => { w.disabled = built.includes(Number(w.dataset.k)); });
+}
+
 function bindCheckable(card, ex, n, onChange) {
   const rows = [...card.querySelectorAll('[data-i]')];
   const checkBtn = card.querySelector('[data-check]');
@@ -223,6 +249,7 @@ function bindCheckable(card, ex, n, onChange) {
   const answered = () => rows.every((row) => {
     if (ex.kind === 'tf' || ex.kind === 'mcq') return row.querySelector('.opt[aria-checked="true"]');
     if (ex.kind === 'hunt') return row.querySelector('.tok[aria-pressed="true"]') && row.querySelector('[data-sel]').value;
+    if (ex.kind === 'reorder') return builtOf(row).length === row.querySelectorAll('.ro-w').length;
     return row.querySelector('[data-sel]').value;
   });
   const refresh = () => { checkBtn.disabled = !answered(); };
@@ -237,9 +264,17 @@ function bindCheckable(card, ex, n, onChange) {
     }
     const tok = e.target.closest('.tok');
     if (tok) { tok.setAttribute('aria-pressed', String(tok.getAttribute('aria-pressed') !== 'true')); refresh(); }
+    const rw = e.target.closest('.ro-w');
+    if (rw && !rw.disabled) { const row = rw.closest('[data-i]'); row.dataset.built = [...builtOf(row), Number(rw.dataset.k)].join(','); drawBuilt(row); refresh(); }
+    const rb = e.target.closest('.ro-b');
+    if (rb) { const row = rb.closest('[data-i]'); const b = builtOf(row); b.splice(Number(rb.dataset.pos), 1); row.dataset.built = b.join(','); drawBuilt(row); refresh(); }
   });
 
   const isRight = (row, i) => {
+    if (ex.kind === 'reorder') {
+      const words = ex.items[i].split(/\s+/);
+      return norm(builtOf(row).map((k) => words[k]).join(' ')) === norm(ex.items[i]);
+    }
     if (ex.kind === 'match') return row.querySelector('[data-sel]').value === ex.pairs[i][1];
     if (ex.kind === 'gap') return norm(row.querySelector('[data-sel]').value) === norm(ex.items[i][1]);
     if (ex.kind === 'tf') return row.querySelector('.opt[aria-checked="true"]').dataset.v === String(ex.items[i][1]);
@@ -253,6 +288,7 @@ function bindCheckable(card, ex, n, onChange) {
     return false;
   };
   const correctText = (i) => {
+    if (ex.kind === 'reorder') return ex.items[i];
     if (ex.kind === 'match') return ex.pairs[i][1];
     if (ex.kind === 'gap') return ex.items[i][1];
     if (ex.kind === 'tf') return `${ex.items[i][1] ? t('ex.true') : t('ex.false')}${ex.items[i][2] ? ` — ${ex.items[i][2]}` : ''}`;
@@ -288,6 +324,7 @@ function bindCheckable(card, ex, n, onChange) {
         });
       }
       const fix = row.querySelector('[data-fix]');
+      row.querySelectorAll('.ro-w, .ro-b').forEach((b) => { b.disabled = true; });
       if (fix && (!ok || ex.kind === 'tf')) {
         fix.hidden = false;
         fix.innerHTML = ok ? `<span lang="en">${esc(ex.items[i][2] || '')}</span>` : `${t('ex.answer')}: <b lang="en">${esc(correctText(i))}</b>`;
@@ -308,6 +345,7 @@ function bindCheckable(card, ex, n, onChange) {
       row.querySelectorAll('[data-sel]').forEach((s) => { s.disabled = false; s.value = ''; });
       row.querySelectorAll('.opt').forEach((o) => { o.disabled = false; o.classList.remove('right', 'wrong'); o.setAttribute('aria-checked', 'false'); });
       row.querySelectorAll('.tok').forEach((o) => { o.disabled = false; o.classList.remove('right', 'wrong'); o.setAttribute('aria-pressed', 'false'); });
+      if (ex.kind === 'reorder') { row.dataset.built = ''; drawBuilt(row); }
       const fix = row.querySelector('[data-fix]'); if (fix) fix.hidden = true;
     });
     card.querySelector('[data-fb]').hidden = true;

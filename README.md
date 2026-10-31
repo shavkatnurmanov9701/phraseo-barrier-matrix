@@ -14,7 +14,7 @@ css/fonts.css         — shrift (Inter Tight — o‘z serverimizda)
 js/art.js             — SVG illyustratsiyalar
 js/icons.js           — Lucide ikonkalari
 js/practice.js        — interaktiv mashqlar mexanizmi
-js/data/practice/     — darslar bo‘yicha mashqlar (l01.js …)
+js/data/practice/     — darslar bo‘yicha mashqlar (l01.js, set_a/b/c.js, kit.js)
 js/app.js             — sahifalar va marshrutlash
 js/i18n.js            — interfeys matnlari (o‘zbekcha / inglizcha)
 js/data/lessons.js    — 19 ta dars: lug‘at, mashqlar, video, uy vazifasi
@@ -51,7 +51,7 @@ python3 -m http.server 8000
 
 1. ✅ Tuzilma va dizayn: bosh sahifa, darslar, dars sahifasi, lug‘at, kitob haqida
 2. ✅ 1-dars: interaktiv mashqlar (avtomatik tekshirish, yozma ishlar, natijalar saqlanadi)
-3. ⏳ Qolgan 18 dars, hikoya matnlari
+3. ✅ Qolgan 18 dars ham interaktiv (Warm-up + avtomatik tekshiriladigan mashqlar)
 4. ⏳ Lug‘atga o‘zbekcha muqobillar, flashcard va testlar
 5. ⏳ (ixtiyoriy) Talaba progressi va o‘qituvchi paneli
 

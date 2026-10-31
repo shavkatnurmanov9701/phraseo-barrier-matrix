@@ -635,3 +635,18 @@ button.type[aria-pressed="true"] .type-card { box-shadow: 0 0 0 4px #fff, 0 0 0 
   .f5 { display: none; }
 }
 .book-stage:has(.book[data-open="true"]) .stage-hint { opacity: 0; }
+
+/* Gap tuzish (so‘zlarni tartiblash) */
+.ro-row { display: grid; gap: 10px; }
+.ro-built { min-height: 48px; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 8px 10px; border-radius: 12px; border: 1.5px dashed var(--line); background: var(--soft); }
+.is-ok .ro-built { border-color: var(--good); background: #F1FBF7; }
+.is-bad .ro-built { border-color: var(--bad); background: #FFF5F6; }
+.ro-ph { font-size: 14px; color: var(--muted); }
+.ro-pool { display: flex; flex-wrap: wrap; gap: 6px; }
+.ro-w, .ro-b { border: 1px solid var(--line); background: #fff; padding: 6px 12px; border-radius: 10px; font-size: 15px; font-weight: 500; cursor: pointer; transition: opacity .15s, border-color .15s; }
+.ro-w:hover:not(:disabled) { border-color: var(--ink); }
+.ro-w:disabled { opacity: .25; cursor: default; }
+.ro-b { background: var(--violet); color: #fff; border-color: var(--violet); }
+.ro-b:disabled { cursor: default; }
+.ro-row [data-mk] { justify-self: start; }
+.gap-note { display: block; line-height: 1.5; margin-bottom: 2px; font-size: 14px; color: var(--muted); font-style: italic; }
