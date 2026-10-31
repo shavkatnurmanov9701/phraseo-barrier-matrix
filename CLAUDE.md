@@ -9,11 +9,18 @@ Every push to `main` goes live in 1–2 minutes, so test locally first (`python3
 - Reply in **Uzbek (Latin)**, short (owner reads on a phone). Use `‘` in o‘, g‘ and `’` for the tutuq belgisi.
 - The owner checks changes on the live site.
 
-## Design
-- Same design system as EnNote (ennote.uz, repo shavkatnurmanov9701/EnNote): navy hero panel with dot grid,
-  white rounded cards (24px) with soft shadows, colored icon tiles, pill nav, Bricolage Grotesque + Figtree + JetBrains Mono.
-- Fonts are self-hosted in `fonts/`; icons are Lucide paths in `js/icons.js` (add new ones from `lucide-static`).
-- Lesson kinds: idiom (violet), phrasal (blue), phrase (teal), vocab (amber).
+## Design (owner's choice 2026-11-01: “Wollo”-style landing, sent as a screen recording)
+- Brand name on the site: **phrasebar** (lowercase wordmark), domain phrasebar.uz. Book title stays “Phraseo-Barrier Matrix”.
+- White background, light-weight big headings (Inter Tight 400, tight letter-spacing, centered), grey cards (#F4F4F7, radius 28),
+  accent blocks: violet #4F2BEF, pink #F2509A, yellow #FFC93C, orange #FF6A2B, periwinkle #6470F0. Pill nav + black CTA button.
+- Home: hero → card stack (yellow/pink/violet) that opens up on scroll → idiom-of-the-day + stats → rolling yellow idiom chip →
+  01/02/03 tilted cards (idioms / phrasal verbs / collocations) → statement that darkens word by word on scroll → big numbers →
+  lessons → book (masonry) → FAQ → periwinkle CTA.
+- Illustrations are hand-drawn SVG in `js/art.js` (literal idioms: cow over the moon, piece of cake, ice cube, spilled beans, heart).
+  AI image generation was unavailable (ElevenLabs out of credits, Canva disabled, HF invoke off). Swap in real 3D renders later if provided.
+- Font self-hosted in `fonts/` (Inter Tight); icons are Lucide paths in `js/icons.js`.
+- Lesson kinds: idiom (orange), phrasal (pink), phrase (violet), vocab (amber).
+- Previous EnNote-style design was replaced at the owner's request (“EnNote bilan bir xil bo‘lib qoldi”).
 
 ## Content
 - `js/data/lessons.js`: 19 lessons. Site numbers 1–19; the book skips Story 15, so each lesson keeps `book` + `page`.

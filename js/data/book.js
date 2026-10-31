@@ -86,3 +86,33 @@ export const LESSON_FLOW = [
   { key: 'wrapup',   uz: 'Wrap-up',      en: 'Wrap-up',     note: { uz: 'Muhokama va xulosa', en: 'Reflection and discussion' } },
   { key: 'homework', uz: 'Uy vazifasi',  en: 'Homework',    note: { uz: 'Iboralarni o‘z nutqingizda qo‘llash', en: 'Using the expressions yourself' } },
 ];
+
+// Bosh sahifadagi katta jumla: {moon} {heart} {ice} — matn ichidagi stikerlar
+export const STATEMENT = {
+  uz: 'Idioma so‘zlari bir narsani {moon} aytadi, ma’nosi esa butunlay boshqa narsani {heart} anglatadi. Phrasebar kitobdagi 19 ta hikoya orqali shu to‘siqni {ice} yengishga yordam beradi.',
+  en: 'An idiom’s words say one thing {moon} while its meaning says something else entirely {heart}. Phrasebar uses the 19 stories of the book to help you break through that barrier {ice}.',
+};
+
+// Ko‘p beriladigan savollar
+export const FAQ = [
+  {
+    q: { uz: 'Phrasebar kim uchun?', en: 'Who is Phrasebar for?' },
+    a: { uz: '“Xorijiy til va adabiyoti (ingliz tili)” yo‘nalishining 1-kurs talabalari uchun, 2-semestr. O‘qituvchilar va ingliz tilini mustaqil o‘rganayotganlar ham foydalanishi mumkin.', en: 'First-year students of Foreign Language and Literature (English), semester 2. Teachers and independent learners can use it too.' },
+  },
+  {
+    q: { uz: 'Sayt kitob bilan qanday bog‘liq?', en: 'How is the site related to the book?' },
+    a: { uz: 'Bu “Phraseo-Barrier Matrix” o‘quv qo‘llanmasining elektron hamrohi. Darslar kitobdagi tartibda, har bir darsda kitobdagi sahifa raqami ko‘rsatilgan.', en: 'It is the online companion to the study guide “Phraseo-Barrier Matrix”. Lessons follow the book’s order, and each lesson shows its page in the book.' },
+  },
+  {
+    q: { uz: 'Mashqlar qanday tekshiriladi?', en: 'How are the activities checked?' },
+    a: { uz: 'Javoblarni belgilab, “Tekshirish” tugmasini bosasiz. To‘g‘ri javoblar yashil, xatolar qizil bo‘ladi va to‘g‘ri javob ko‘rsatiladi.', en: 'Choose your answers and press “Check”. Correct answers turn green, mistakes turn red and the right answer is shown.' },
+  },
+  {
+    q: { uz: 'Natijalarim qayerda saqlanadi?', en: 'Where are my results saved?' },
+    a: { uz: 'Natijalar shu qurilmadagi brauzerda saqlanadi. Boshqa telefon yoki kompyuterda ular ko‘rinmaydi.', en: 'Results are saved in the browser on this device. They are not visible on another phone or computer.' },
+  },
+  {
+    q: { uz: 'Ro‘yxatdan o‘tish kerakmi?', en: 'Do I need an account?' },
+    a: { uz: 'Yo‘q. Saytni ochib, darhol darslarni boshlashingiz mumkin.', en: 'No. Open the site and start the lessons right away.' },
+  },
+];

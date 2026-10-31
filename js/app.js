@@ -1,36 +1,31 @@
-// Phraseo-Barrier Matrix — sahifalar va marshrutlash (hash router).
-// Dizayn EnNote (ennote.uz) uslubida.
+// Phrasebar — sahifalar va marshrutlash (hash router).
+// Dizayn: oq fon, ingichka katta sarlavhalar, binafsha/pushti/sariq/to‘q sariq kartochkalar (Wollo uslubi).
 import { LESSONS, KINDS, ACTIVITY_TYPES, OBJECTIVES, allEntries } from './data/lessons.js';
-import { BOOK, HERO_IDIOMS, LESSON_FLOW } from './data/book.js';
+import { BOOK, HERO_IDIOMS, STATEMENT, FAQ } from './data/book.js';
 import { t, pick, getLang, setLang } from './i18n.js';
 import { icon } from './icons.js';
+import { heroScene, cakeIcon, planeIcon, puzzleIcon, bookIcon, sticker } from './art.js';
 import { PRACTICE } from './data/practice/index.js';
 import { renderExercise, bindExercise, idiomMatcher, progressCount, clearLesson } from './practice.js';
 
 const main = document.getElementById('main');
 const ENTRIES = allEntries();
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /* ---------- Yordamchilar ---------- */
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const lessonUrl = (n) => `#/dars/${n}`;
 const kindLabel = (k) => pick(KINDS[k]);
+const pad2 = (n) => String(n).padStart(2, '0');
 // Interaktiv darslarda mashqlar soni amaldagi mashqlardan olinadi
 const actCount = (l) => (PRACTICE[l.n] ? PRACTICE[l.n].exercises.length : l.activities.length);
 const TOTAL_ACTS = LESSONS.reduce((n, l) => n + actCount(l), 0);
 
-// Har bir dars mavzusiga mos ikonka
-const LESSON_ICONS = {
-  1: 'sun', 2: 'map', 3: 'hand-coins', 4: 'users', 5: 'star', 6: 'croissant', 7: 'tent', 8: 'mail',
-  9: 'palette', 10: 'door-open', 11: 'plane', 12: 'clock', 13: 'camera', 14: 'calendar-x', 15: 'piggy-bank',
-  16: 'bird', 17: 'key-round', 18: 'frame', 19: 'library',
-};
 const ACT_ICONS = {
   gap: 'text-cursor-input', mcq: 'list-checks', tf: 'square-check-big', match: 'shuffle', order: 'arrow-up-down',
   rewrite: 'repeat', open: 'circle-help', discuss: 'message-circle', write: 'pen-line', video: 'video',
   crossword: 'grid-2x2', riddle: 'puzzle', roleplay: 'users', hunt: 'search',
 };
-const STEP_ICONS = { warmup: 'lightbulb', story: 'book-open', glossary: 'book-marked', practice: 'list-checks', video: 'video', wrapup: 'message-circle', homework: 'pen-line' };
-const STEP_COLORS = { warmup: '#D97706', story: '#2563EB', glossary: '#7C3AED', practice: '#0EA5B7', video: '#DB2777', wrapup: '#4F46E5', homework: '#059669' };
 
 // Lug‘at: bir xil iboralarni birlashtiramiz (bir nechta darsda uchrasa)
 const sortKey = (s) => s.replace(/^(a|an|the)\s+/i, '').toLowerCase();
@@ -53,7 +48,7 @@ function youTubeId(url) {
   return m ? m[1] : null;
 }
 
-// Hikoya matnida lug‘atdagi iboralarni belgilash (taxminiy moslik)
+// Hikoya matnida lug‘atdagi iboralarni belgilash (taxminiy moslik) — matnli hikoyalar uchun
 function highlighter(glossary) {
   const pron = '(?:your|her|his|my|their|our|its)';
   const self = '(?:yourself|herself|himself|myself|themselves|ourselves)';
@@ -74,20 +69,10 @@ function highlighter(glossary) {
   return (text) => esc(text).replace(re, '<mark class="hl">$1</mark>');
 }
 
-function sectionHead(eyebrow, title, sub, right = '') {
-  return `<div class="section-head">
-    <div>
-      ${eyebrow ? `<p class="eyebrow">${esc(eyebrow)}</p>` : ''}
-      <h2 class="h2">${esc(title)}</h2>
-      ${sub ? `<p class="sub">${esc(sub)}</p>` : ''}
-    </div>${right}
-  </div>`;
-}
-
-function filtersHtml(scope, kinds = ['idiom', 'phrasal', 'phrase']) {
+function filtersHtml(scope, kinds = ['idiom', 'phrasal', 'phrase'], active = 'all') {
   return `<div class="seg" role="group" aria-label="Filter" data-filter-scope="${scope}">
-    <button type="button" data-filter="all" aria-pressed="true">${t('filter.all')}</button>
-    ${kinds.map((k) => `<button type="button" data-filter="${k}" data-kind="${k}" aria-pressed="false"><span class="dot"></span>${kindLabel(k)}</button>`).join('')}
+    <button type="button" data-filter="all" aria-pressed="${active === 'all'}">${t('filter.all')}</button>
+    ${kinds.map((k) => `<button type="button" data-filter="${k}" data-kind="${k}" aria-pressed="${active === k}"><span class="dot"></span>${kindLabel(k)}</button>`).join('')}
   </div>`;
 }
 
@@ -101,22 +86,27 @@ function bindFilters(scope, onChange) {
   });
 }
 
+function pageHead(title, sub, extra = '') {
+  return `<header class="page-head reveal">
+    <h1 class="display">${title}</h1>
+    ${sub ? `<p class="lede">${sub}</p>` : ''}${extra}
+  </header>`;
+}
+
 /* ---------- Dars kartochkasi ---------- */
 function lessonCard(l) {
-  return `<a class="card lcard" href="${lessonUrl(l.n)}" data-kind="${l.kind}">
-    <span class="glow" aria-hidden="true"></span>
+  return `<a class="lcard" href="${lessonUrl(l.n)}" data-kind="${l.kind}">
     <div class="lcard-top">
-      <span class="tile">${icon(LESSON_ICONS[l.n], 22)}</span>
-      <span class="pill">${esc(t('lesson.label', l.n).toUpperCase())}</span>
+      <span class="lnum tnum">${pad2(l.n)}</span>
+      <span class="kpill">${esc(kindLabel(l.kind))}</span>
     </div>
     <h3 lang="en">${esc(l.title)}</h3>
     <p class="desc">${esc(pick(l.about))}</p>
-    <div class="meta">
-      <span>${icon('layers', 14)} ${t('lessons.count', l.glossary.length)}</span>
-      <span>${icon('list-checks', 14)} ${t('lessons.acts', actCount(l))}</span>
-    </div>
     ${cardProgress(l.n)}
-    <span class="lcard-cta"><span>${t('lessons.open')}</span>${icon('arrow-right', 16)}</span>
+    <div class="lcard-foot">
+      <span class="muted">${t('lessons.count', l.glossary.length)} · ${t('lessons.acts', actCount(l))}</span>
+      <span class="round-arrow" aria-hidden="true">${icon('arrow-right', 16)}</span>
+    </div>
   </a>`;
 }
 
@@ -125,105 +115,149 @@ function cardProgress(n) {
   if (!pr) return '';
   const { done, total } = progressCount(n, pr);
   const pct = Math.round((done / total) * 100);
-  return `<div class="cprog"><div class="cprog-row"><span class="pill soon live">${icon('sparkles', 12)} ${getLang() === 'en' ? 'Interactive' : 'Interaktiv'}</span><span class="tnum">${t('lessons.progress', done, total)}</span></div><div class="bar"><span style="width:${pct}%"></span></div></div>`;
+  return `<div class="cprog"><div class="cprog-row"><span class="live">${icon('sparkles', 12)} ${getLang() === 'en' ? 'Interactive' : 'Interaktiv'}</span><span class="tnum">${t('lessons.progress', done, total)}</span></div><div class="bar"><span style="width:${pct}%"></span></div></div>`;
 }
 
-// [[ko'rinish|lug'atdagi shakli]] belgilarini bosiladigan iboraga aylantiradi
-function storyHtml(paras, glossary) {
-  const meaning = new Map(glossary.map(([term, m]) => [term.toLowerCase(), m]));
-  return paras.map((p) => `<p>${esc(p).replace(/\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g, (_, shown, term) => {
-    const m = meaning.get((term || shown).toLowerCase()) || '';
-    return `<button type="button" class="idi" aria-expanded="false" data-m="${esc(m)}">${shown}</button>`;
-  })}</p>`).join('');
-}
-
-function cardsHtml(filter) {
-  const list = LESSONS.filter((l) => filter === 'all' || l.kind === filter);
+function cardsHtml(filter, limit = 0) {
+  let list = LESSONS.filter((l) => filter === 'all' || l.kind === filter);
+  if (limit) list = list.slice(0, limit);
   if (!list.length) return `<p class="empty-card">${t('lessons.empty')}</p>`;
   return list.map(lessonCard).join('');
 }
 
 /* ---------- Bosh sahifa ---------- */
 function viewHome() {
+  const kindStats = ['idiom', 'phrasal', 'phrase'].map((k) => ({ k, lessons: LESSONS.filter((l) => l.kind === k).length, entries: MERGED.filter((e) => e.kind === k).length }));
+  const maxEntries = Math.max(...kindStats.map((x) => x.entries));
+  const typeCards = [
+    { k: 'idiom', cls: 'c-orange', art: cakeIcon('ci') },
+    { k: 'phrasal', cls: 'c-pink', art: planeIcon('pi') },
+    { k: 'phrase', cls: 'c-violet', art: puzzleIcon('zi') },
+  ];
+  const statement = pick(STATEMENT).split(/(\{\w+\})/).map((part, i) => {
+    const m = part.match(/^\{(\w+)\}$/);
+    if (m) return `<span class="inline-sticker" aria-hidden="true">${sticker(m[1], `st${i}`)}</span>`;
+    return part.split(/(\s+)/).map((w) => (w.trim() ? `<span class="w">${esc(w)}</span>` : w)).join('');
+  }).join('');
+  const stats = [
+    { n: LESSONS.length, k: 1, s: 'cake', bg: '#FFE8DC' },
+    { n: MERGED.length, k: 2, s: 'heart', bg: '#FFE3F0' },
+    { n: TOTAL_ACTS, k: 3, s: 'ice', bg: '#E2F6FC' },
+    { n: 3, k: 4, s: 'moon', bg: '#FFF4D1' },
+  ];
+
   return `
-  <section class="hero rise">
-    <div class="dotgrid" aria-hidden="true"></div>
-    <div class="blob v" aria-hidden="true"></div>
-    <div class="blob b" aria-hidden="true"></div>
-    <div class="hero-grid">
-      <div>
-        <span class="hero-pill">${icon('sparkles', 14)} ${t('hero.pill')}</span>
-        <h1>${t('hero.title1')} <span class="grad-text">${t('hero.title2')}</span></h1>
-        <p class="hero-sub">${t('hero.sub')}</p>
-        <div class="hero-actions">
-          <a class="btn light lg" href="#/darslar">${t('hero.start')} ${icon('arrow-right', 18)}</a>
-          <a class="btn outline-light lg" href="#/lugat">${icon('book-marked', 17)} ${t('hero.glossary')}</a>
-        </div>
-        <dl class="hero-stats">
-          <div><dt class="sr">${t('stat.lessons')}</dt><dd><b class="tnum">${LESSONS.length}</b><span>${t('stat.lessons')}</span></dd></div>
-          <div><dt class="sr">${t('stat.entries')}</dt><dd><b class="tnum">${MERGED.length}</b><span>${t('stat.entries')}</span></dd></div>
-          <div><dt class="sr">${t('stat.activities')}</dt><dd><b class="tnum">${TOTAL_ACTS}</b><span>${t('stat.activities')}</span></dd></div>
-        </dl>
-      </div>
-      <div class="art">
-        <div class="art-glow" aria-hidden="true"></div>
-        <span class="chip-float bubble" aria-hidden="true" lang="en">Break the ice!</span>
-        <span class="chip-float count" aria-hidden="true"><span class="ib">${icon('flame', 15)}</span>${MERGED.length} ${getLang() === 'en' ? 'idioms' : 'ta ibora'}</span>
+  <section class="hero wrap">
+    <h1 class="display hero-title reveal">${t('w.heroTitle')}</h1>
+    <p class="lede reveal">${t('w.heroSub')}</p>
+    <div class="hero-actions reveal">
+      <a class="btn violet" href="#/darslar">${t('w.start')}</a>
+      <a class="btn ghost" href="#/lugat">${t('w.glossary')}</a>
+    </div>
+  </section>
+
+  <section class="stack-wrap" id="stack" aria-label="Phrasebar">
+    <div class="stack">
+      <div class="layer y" aria-hidden="true"></div>
+      <div class="layer p" aria-hidden="true"></div>
+      <div class="layer v">${heroScene('hs')}</div>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <h2 class="display h2 center reveal">${t('w.dayTitle')}</h2>
+    <div class="duo">
+      <div class="panel reveal">
+        <p class="panel-title">${t('w.dayCard')}</p>
         <div class="flash" id="flash" data-open="false" aria-live="polite"></div>
-        <span class="chip-float ok" aria-hidden="true">${icon('sparkles', 15)} ${t('chip.literal')}</span>
-        <a class="mini-cover" href="#/kitob" aria-label="${esc(t('nav.about'))}"><img src="img/cover-sm.webp" width="400" height="566" alt=""></a>
       </div>
-    </div>
-  </section>
-
-  <section aria-labelledby="h-lessons">
-    ${sectionHead(t('home.lessonsEyebrow'), t('home.lessonsTitle'), t('home.lessonsSub'), `<a class="btn secondary" href="#/darslar">${t('all.lessons')} ${icon('arrow-right', 16)}</a>`)}
-    <div class="filters-row">${filtersHtml('home')}</div>
-    <div class="grid-cards" id="cards">${cardsHtml('all')}</div>
-  </section>
-
-  <section>
-    ${sectionHead(t('home.flowEyebrow'), t('home.flowTitle'), t('home.flowSub'))}
-    <div class="grid-cards">
-      ${LESSON_FLOW.map((s, i) => `<div class="card step" style="--k:${STEP_COLORS[s.key]}">
-        <span class="tile-wrap"><span class="tile soft">${icon(STEP_ICONS[s.key], 22)}</span><span class="badge">${i + 1}</span></span>
-        <h3>${esc(pick(s))}</h3>
-        <p>${esc(pick(s.note))}</p>
-      </div>`).join('')}
-      <div class="promo">
-        <div><small>${t('home.flowCardTop')}</small><p>${t('home.flowCard')}</p></div>
-        <a href="#/dars/1">${t('lesson.label', 1)}: A Day in the Life ${icon('arrow-right', 16)}</a>
-      </div>
-    </div>
-  </section>
-
-  <section class="card pad">
-    <div class="search-card">
-      ${sectionHead(t('home.searchEyebrow'), t('home.searchTitle'), t('home.searchSub'))}
-      <form id="home-search" role="search">
-        <div class="search-box">
-          ${icon('search', 20)}
-          <input name="q" type="search" autocomplete="off" placeholder="${esc(t('home.searchPh'))}" aria-label="${esc(t('home.searchTitle'))}">
-          <button class="btn primary" type="submit">${t('home.searchBtn')}</button>
+      <div class="panel reveal">
+        <p class="panel-title">${t('w.mixCard')}</p>
+        <div class="mix">
+          <div class="mix-tiles">
+            <div class="tile-y"><small>${t('stat.entries')}</small><b class="tnum">+${MERGED.length}</b></div>
+            <div class="tile-p"><small>${t('stat.lessons')}</small><b class="tnum">+${LESSONS.length}</b></div>
+          </div>
+          <ul class="bars">
+            ${kindStats.map((x) => `<li data-kind="${x.k}"><span class="bar-fill" style="--w:${Math.round((x.entries / maxEntries) * 100)}%"><b class="tnum">${x.entries}</b></span><span class="bar-label">${kindLabel(x.k)}</span></li>`).join('')}
+          </ul>
         </div>
-      </form>
+      </div>
     </div>
   </section>
 
-  <section class="card pad">
-    <div class="about-teaser">
-      <img src="img/cover-sm.webp" width="400" height="566" alt="“Phraseo-Barrier Matrix” kitobi muqovasi" loading="lazy">
-      <div>
-        <p class="eyebrow">${t('home.aboutEyebrow')}</p>
-        <h2 class="h2" style="margin-top:6px" lang="en">${esc(BOOK.title)}</h2>
-        <div class="facts">
-          <span>${icon('pen-line', 15)} ${esc(BOOK.author)}</span>
-          <span>${icon('graduation-cap', 15)} ${esc(pick(BOOK.university))}</span>
-          <span>${icon('map', 15)} ${esc(pick(BOOK.city))}</span>
-        </div>
-        <p class="prose" style="color:rgb(var(--muted))">${esc(pick(BOOK.annotation))}</p>
-        <p style="margin-top:20px"><a class="btn secondary" href="#/kitob">${t('home.aboutMore')} ${icon('arrow-right', 16)}</a></p>
+  <section class="section wrap learn">
+    <p class="display learn-line reveal">${t('w.learn')} <span class="chip-roll" id="roll" aria-live="polite"><span lang="en">${esc(HERO_IDIOMS[0].en.toLowerCase())}</span></span></p>
+    <p class="center"><a class="btn ghost" href="#/lugat">${t('w.glossary')}</a></p>
+  </section>
+
+  <section class="section wrap">
+    <h2 class="display h2 center reveal">${t('w.typesTitle')}</h2>
+    <div class="types">
+      ${typeCards.map((c, i) => {
+        const st = kindStats.find((x) => x.k === c.k);
+        return `<a class="type reveal" href="#/darslar?tur=${c.k}" style="--i:${i}">
+          <span class="type-label">${esc(kindLabel(c.k))}<br><span class="muted">${t('w.lessonsOf', st.lessons)} · ${t('w.entriesN', st.entries)}</span></span>
+          <span class="type-card ${c.cls}">
+            <span class="type-pill">${esc(kindLabel(c.k))}</span>
+            <span class="type-art">${c.art}</span>
+            <span class="type-num">${pad2(i + 1)}</span>
+            <span class="type-go" aria-hidden="true">${icon('arrow-right', 16)}</span>
+          </span>
+        </a>`;
+      }).join('')}
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <p class="statement" id="statement">${statement}</p>
+  </section>
+
+  <section class="section wrap">
+    <ul class="stats">
+      ${stats.map((s) => `<li class="stat reveal">
+        <span class="stat-thumb" style="background:${s.bg}">${sticker(s.s, `sx${s.k}`)}</span>
+        <span class="stat-num tnum">${s.n}<span class="stat-pill p${s.k}">${t(`w.statsPill${s.k}`)}</span></span>
+        <span class="stat-desc">${t(`w.statsDesc${s.k}`)}</span>
+      </li>`).join('')}
+    </ul>
+  </section>
+
+  <section class="section wrap" aria-labelledby="h-lessons">
+    <h2 class="display h2 center reveal" id="h-lessons">${t('w.lessonsTitle')}</h2>
+    <div class="center filters-row">${filtersHtml('home')}</div>
+    <div class="grid-cards" id="cards">${cardsHtml('all', 6)}</div>
+    <p class="center" style="margin-top:28px"><a class="btn dark" href="#/darslar">${t('w.allLessons')}</a></p>
+  </section>
+
+  <section class="section wrap">
+    <h2 class="display h2 center reveal">${t('w.bookTitle')}</h2>
+    <div class="masonry">
+      <figure class="quote big reveal">
+        <span class="qmark" aria-hidden="true">“</span>
+        <blockquote>${esc(pick(BOOK.annotation))}</blockquote>
+        <figcaption><b>${esc(BOOK.author)}</b><span>${esc(pick(BOOK.university))}</span></figcaption>
+      </figure>
+      <a class="quote cover reveal" href="#/kitob"><img src="img/cover-sm.webp" width="400" height="566" alt="“Phraseo-Barrier Matrix” kitobi muqovasi" loading="lazy"></a>
+      ${BOOK.reviewers.map((r) => `<figure class="quote reveal"><figcaption><small>${t('about.reviewers')}</small><b>${esc(r.name)}</b><span>${esc(pick(r.role))}</span></figcaption></figure>`).join('')}
+      <figure class="quote reveal"><figcaption><small>${esc(pick(BOOK.city))}</small><b>${esc(pick(BOOK.program))}</b></figcaption><a class="link" href="#/kitob">${t('home.aboutMore')} ${icon('arrow-right', 14)}</a></figure>
+    </div>
+  </section>
+
+  <section class="section wrap narrow">
+    <h2 class="display h2 center reveal">${t('w.faqTitle')}</h2>
+    <div class="faq">
+      ${FAQ.map((f) => `<details class="reveal"><summary>${esc(pick(f.q))}<span class="plus" aria-hidden="true"></span></summary><p>${esc(pick(f.a))}</p></details>`).join('')}
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="cta reveal">
+      <div class="cta-text">
+        <h2 class="display">${t('w.ctaTitle')}</h2>
+        <a class="btn light" href="#/darslar">${t('w.start')}</a>
       </div>
+      <div class="cta-art">${bookIcon('cta')}</div>
     </div>
   </section>`;
 }
@@ -236,25 +270,42 @@ function renderFlash(open = false) {
   el.dataset.open = String(open);
   el.innerHTML = `
     <div class="flash-top">
-      <span class="flash-tag">${esc(t('card.tag', h.lesson))}</span>
-      <span class="flash-count tnum">${heroIndex + 1} / ${HERO_IDIOMS.length}</span>
+      <span class="kpill" data-kind="idiom">${esc(t('lesson.label', h.lesson))}</span>
+      <span class="muted tnum">${heroIndex + 1} / ${HERO_IDIOMS.length}</span>
     </div>
     <p class="flash-idiom" lang="en">${esc(h.en)}</p>
     <p class="flash-literal">${t('card.literal')}: <i lang="uz">${esc(h.literal)}</i></p>
-    <button class="flash-reveal" type="button" data-act="toggle" aria-expanded="${open}">
-      <span class="play">${icon(open ? 'x' : 'eye', 18)}</span>
-      <span class="lbl">${open ? t('card.hide') : t('card.reveal')}</span>
-    </button>
     <div class="flash-meaning">
-      <small>${open ? t('card.meaning') : t('card.hidden')}</small>
-      ${open
-        ? `<div class="reveal-in"><p class="uz" lang="uz">${esc(h.uz)}</p><p class="en" lang="en">${esc(h.meaning)}</p></div>`
-        : `<div class="q" aria-hidden="true"><span style="width:44%"></span><span style="width:26%"></span></div><div class="q" aria-hidden="true"><span style="width:60%"></span></div>`}
+      <div class="tile-y small"><small>${open ? t('card.meaning') : t('card.hidden')}</small>
+        ${open ? `<b class="reveal-in" lang="uz">${esc(h.uz)}</b>` : '<b aria-hidden="true">? ? ?</b>'}
+      </div>
+      <div class="tile-p small"><small>English</small>${open ? `<b class="reveal-in" lang="en">${esc(h.meaning)}</b>` : '<b aria-hidden="true">? ? ?</b>'}</div>
     </div>
     <div class="flash-foot">
-      <a href="${lessonUrl(h.lesson)}">${t('card.lesson')} ${icon('arrow-right', 14)}</a>
-      <button class="flash-next" type="button" data-act="next">${icon('shuffle', 14)} ${t('card.next')}</button>
+      <button class="btn violet sm" type="button" data-act="toggle" aria-expanded="${open}">${icon(open ? 'x' : 'eye', 15)} ${open ? t('card.hide') : t('card.reveal')}</button>
+      <button class="btn ghost sm" type="button" data-act="next">${icon('shuffle', 14)} ${t('card.next')}</button>
+      <a class="link" href="${lessonUrl(h.lesson)}">${t('card.lesson')} ${icon('arrow-right', 14)}</a>
     </div>`;
+}
+
+/* ---------- Scroll effektlari ---------- */
+let cleanup = [];
+function onScrollFx(fn) {
+  let raf = 0;
+  const run = () => { raf = 0; fn(); };
+  const handler = () => { if (!raf) raf = requestAnimationFrame(run); };
+  window.addEventListener('scroll', handler, { passive: true });
+  window.addEventListener('resize', handler);
+  fn();
+  cleanup.push(() => { window.removeEventListener('scroll', handler); window.removeEventListener('resize', handler); cancelAnimationFrame(raf); });
+}
+
+function revealOnView() {
+  const els = main.querySelectorAll('.reveal');
+  if (reduceMotion || !('IntersectionObserver' in window)) { els.forEach((e) => e.classList.add('in')); return; }
+  const io = new IntersectionObserver((entries) => entries.forEach((en) => { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } }), { rootMargin: '0px 0px -8% 0px' });
+  els.forEach((e) => io.observe(e));
+  cleanup.push(() => io.disconnect());
 }
 
 function bindHome() {
@@ -271,24 +322,44 @@ function bindHome() {
       flash.querySelector('[data-act="next"]').focus();
     }
   });
-  bindFilters('home', (f) => { document.getElementById('cards').innerHTML = cardsHtml(f); });
-  document.getElementById('home-search').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const q = new FormData(e.target).get('q').trim();
-    location.hash = q ? `#/lugat?q=${encodeURIComponent(q)}` : '#/lugat';
+  bindFilters('home', (f) => { document.getElementById('cards').innerHTML = cardsHtml(f, 6); });
+
+  // Aylanib turuvchi sariq "chip"
+  const roll = document.getElementById('roll');
+  let ri = 0;
+  if (!reduceMotion) {
+    const id = setInterval(() => {
+      ri = (ri + 1) % HERO_IDIOMS.length;
+      roll.innerHTML = `<span lang="en" class="roll-in">${esc(HERO_IDIOMS[ri].en.toLowerCase())}</span>`;
+    }, 2200);
+    cleanup.push(() => clearInterval(id));
+  }
+
+  // Kartochkalar to‘plami: scroll bilan kattalashadi
+  const stack = document.getElementById('stack');
+  const words = [...document.querySelectorAll('#statement .w, #statement .inline-sticker')];
+  onScrollFx(() => {
+    const vh = window.innerHeight;
+    const r = stack.getBoundingClientRect();
+    const p = reduceMotion ? 1 : Math.min(1, Math.max(0, (vh * 0.75 - r.top) / (vh * 0.6)));
+    stack.style.setProperty('--p', p.toFixed(3));
+    // Katta jumla: so‘zlar scroll bilan qorayadi
+    const st = document.getElementById('statement');
+    if (!st) return;
+    const sr = st.getBoundingClientRect();
+    const q = reduceMotion ? 1 : Math.min(1, Math.max(0, (vh * 0.85 - sr.top) / (sr.height + vh * 0.35)));
+    const lit = Math.round(q * words.length);
+    words.forEach((w, i) => w.classList.toggle('lit', i < lit));
   });
 }
 
 /* ---------- Darslar ro‘yxati ---------- */
-function viewLessons() {
-  return `<section>
-    <div class="page-head">
-      <p class="eyebrow">${t('lessons.eyebrow')}</p>
-      <h1 class="h1">${t('lessons.title')}</h1>
-      <p class="sub">${t('lessons.lead')}</p>
-    </div>
-    <div class="filters-row">${filtersHtml('lessons')}</div>
-    <div class="grid-cards" id="cards">${cardsHtml('all')}</div>
+function viewLessons(params) {
+  const tur = ['idiom', 'phrasal', 'phrase'].includes(params.get('tur')) ? params.get('tur') : 'all';
+  return `<section class="wrap page">
+    ${pageHead(t('lessons.title'), t('lessons.lead'))}
+    <div class="center filters-row">${filtersHtml('lessons', undefined, tur)}</div>
+    <div class="grid-cards" id="cards">${cardsHtml(tur)}</div>
   </section>`;
 }
 function bindLessons() {
@@ -298,94 +369,73 @@ function bindLessons() {
 /* ---------- Bitta dars ---------- */
 function viewLesson(n) {
   const l = LESSONS.find((x) => x.n === n);
-  if (!l) return `<section class="notfound"><h1 class="h2">${t('lesson.notFound')}</h1><a class="btn primary" href="#/darslar">${t('all.lessons')}</a></section>`;
+  if (!l) return `<section class="wrap page notfound"><h1 class="display h2">${t('lesson.notFound')}</h1><a class="btn violet" href="#/darslar">${t('all.lessons')}</a></section>`;
   const prev = LESSONS.find((x) => x.n === n - 1);
   const next = LESSONS.find((x) => x.n === n + 1);
   const vid = youTubeId(l.video);
   const isShort = l.video?.includes('/shorts/');
   const mark = highlighter(l.glossary);
   const lang = getLang() === 'en' ? 'en' : 'uz';
-
   const pr = PRACTICE[l.n];
+
   // Hikoya: kitobdagi sahifa (rasm) bo‘lsa, o‘sha ko‘rsatiladi (egasi shuni tanladi)
-  const storyBlock = pr?.story && !l.poster
-    ? `<p class="note">${t('lesson.tapIdiom')}</p>
-       <div class="story-text" lang="en">${storyHtml(pr.story, l.glossary)}</div>
-       ${l.poster ? `<button class="btn secondary sm" type="button" data-zoom="${l.poster}" data-alt="${esc(l.title)}" style="margin-top:20px">${icon('book-open', 15)} ${t('lesson.showPoster')}</button>` : ''}`
-    : l.poster
+  const storyBlock = l.poster
     ? `<button class="poster" type="button" data-zoom="${l.poster}" aria-label="${esc(t('lesson.open'))}: ${esc(l.title)}">
          <img src="${l.poster}" alt="${esc(l.title)} — kitobdagi hikoya sahifasi" loading="lazy">
          <span class="enlarge">${icon('maximize-2', 15)} ${t('lesson.open')}</span>
        </button>
-       <p class="poster-note">${t('lesson.storyPoster')}</p>`
+       <p class="note">${t('lesson.storyPoster')}</p>`
     : `${l.warmup ? `<img class="warmup-img" src="${l.warmup}" alt="" loading="lazy">` : ''}
        <p class="note">${t('lesson.storyText')}</p>
        <div class="story-text" lang="en">${l.story.map((p) => p.startsWith('§')
           ? `<p class="verse">${esc(p.slice(1))}</p>`
           : `<p>${mark(p)}</p>`).join('')}</div>`;
 
-  const block = (ic, title, body, color) => `<section class="card pad"${color ? ` style="--k:${color}"` : ''}>
-      <div class="block-head"><span class="tile sm soft">${icon(ic, 20)}</span><h2 class="h3">${title}</h2></div>
+  const block = (title, body, id = '') => `<section class="panel"${id ? ` id="${id}"` : ''}>
+      <h2 class="panel-h">${title}</h2>
       ${body}
     </section>`;
 
-  return `<div class="stack">
-  <nav class="crumbs" aria-label="breadcrumb">
-    <a href="#/darslar">${t('nav.lessons')}</a>${icon('arrow-right', 14)}<span>${t('lesson.label', l.n)}</span>
-  </nav>
+  return `<div class="wrap page lesson" data-kind="${l.kind}">
+  <nav class="crumbs" aria-label="breadcrumb"><a href="#/darslar">${t('nav.lessons')}</a><span aria-hidden="true">/</span><span>${t('lesson.label', l.n)}</span></nav>
 
-  <section class="card lesson-hero" data-kind="${l.kind}">
-    <span class="glow" aria-hidden="true"></span>
-    <div class="lesson-hero-row">
-      <span class="tile">${icon(LESSON_ICONS[l.n], 30)}</span>
-      <div style="flex:1;min-width:240px">
-        <div class="pills">
-          <span class="pill">${esc(t('lesson.label', l.n).toUpperCase())}</span>
-          <span class="pill">${esc(kindLabel(l.kind))}</span>
-        </div>
-        <h1 lang="en">${esc(l.title)}</h1>
-        <p class="sub">${esc(pick(l.about))}</p>
-        <div class="meta">
-          <span>${icon('layers', 15)} ${t('lessons.count', l.glossary.length)}</span>
-          <span>${icon('list-checks', 15)} ${t('lessons.acts', actCount(l))}</span>
-          ${vid ? `<span>${icon('video', 15)} Video</span>` : ''}
-          <span>${icon('book-open', 15)} ${t('lesson.inBook', l.book, l.page)}</span>
-        </div>
-      </div>
-    </div>
-  </section>
+  <header class="lesson-head reveal">
+    <div class="pills"><span class="kpill">${esc(kindLabel(l.kind))}</span><span class="kpill plain">${t('lesson.inBook', l.book, l.page)}</span></div>
+    <h1 class="display" lang="en"><span class="lnum-big tnum">${pad2(l.n)}</span> ${esc(l.title)}</h1>
+    <p class="lede">${esc(pick(l.about))}</p>
+    <p class="lesson-meta muted">${t('lessons.count', l.glossary.length)} · ${t('lessons.acts', actCount(l))}${vid ? ' · Video' : ''}</p>
+  </header>
 
-  <div class="lesson-layout" data-kind="${l.kind}">
+  <div class="lesson-layout">
     <div class="lesson-main">
-      ${block('target', t('lesson.objectives'), `<p class="note">${t('lesson.objectivesLead')}</p>
-        <ul class="checks" ${lang === 'en' ? 'lang="en"' : ''}>${OBJECTIVES[lang].map((o) => `<li><span class="ok">${icon('check', 14)}</span><span>${esc(o)}</span></li>`).join('')}</ul>`, '#059669')}
+      ${block(t('lesson.objectives'), `<p class="note">${t('lesson.objectivesLead')}</p>
+        <ul class="checks" ${lang === 'en' ? 'lang="en"' : ''}>${OBJECTIVES[lang].map((o) => `<li><span class="ok">${icon('check', 13)}</span><span>${esc(o)}</span></li>`).join('')}</ul>`)}
 
       ${pr?.warmup ? renderExercise(pr.warmup, null, l.n) : ''}
 
-      ${block('book-open', t('lesson.story'), storyBlock, '#2563EB')}
+      ${block(t('lesson.story'), storyBlock)}
 
-      ${pr ? practiceHtml(l, pr) : block('list-checks', t('lesson.activities'), `<p class="note">${t('lesson.activitiesNote')}</p>
+      ${pr ? practiceHtml(l, pr) : block(t('lesson.activities'), `<p class="note">${t('lesson.activitiesNote')}</p>
         <ol class="acts">${l.activities.map(([title, type]) => `<li>
-          <span class="tile sm soft" style="--k:${type === 'video' ? '#DB2777' : 'var(--k-phrase)'}">${icon(ACT_ICONS[type] || 'list-checks', 18)}</span>
+          <span class="act-ic">${icon(ACT_ICONS[type] || 'list-checks', 17)}</span>
           <span class="txt"><b lang="en">${esc(title)}</b><small>${esc(pick(ACTIVITY_TYPES[type]))}</small></span>
-          <span class="pill soon">${t('lesson.soon')}</span>
-        </li>`).join('')}</ol>`, '#0EA5B7')}
+          <span class="soon">${t('lesson.soon')}</span>
+        </li>`).join('')}</ol>`)}
 
-      ${block('video', t('lesson.video'), vid ? `<div class="video${isShort ? ' short' : ''}">
+      ${vid ? block(t('lesson.video'), `<div class="video${isShort ? ' short' : ''}">
           <button type="button" data-video="${vid}" aria-label="${esc(t('lesson.videoPlay'))}">
             <img src="https://i.ytimg.com/vi/${vid}/hqdefault.jpg" alt="" loading="lazy" onerror="this.remove()">
             <span class="playbtn"><span class="c">${icon('play', 16)}</span>${t('lesson.videoPlay')}</span>
           </button>
         </div>
-        <a class="link" href="${esc(l.video)}" target="_blank" rel="noopener">${t('lesson.videoOpen')} ${icon('arrow-right', 14)}</a>`
-        : `<p class="note" style="margin:0">${t('lesson.noVideo')}</p>`, '#DB2777')}
+        <a class="link" href="${esc(l.video)}" target="_blank" rel="noopener">${t('lesson.videoOpen')} ${icon('arrow-right', 14)}</a>`) : ''}
 
-      ${pr ? '' : block('pen-line', t('lesson.homework'), `<ul class="hw" lang="en">${l.homework.map((h) => `<li><span class="ic-wrap">${icon('pen-line', 15)}</span><span>${esc(h)}</span></li>`).join('')}</ul>`, '#7C3AED')}
+      ${pr ? '' : block(t('lesson.homework'), `<ul class="hw" lang="en">${l.homework.map((h) => `<li>${esc(h)}</li>`).join('')}</ul>`)}
     </div>
 
-    <aside class="card aside">
+    <aside class="panel aside">
       <details class="gloss" id="gloss" open>
-        <summary><span class="tile sm soft">${icon('book-marked', 20)}</span><h2 class="h3">${t('lesson.glossary')}</h2><span class="cnt">${l.glossary.length}</span><span class="chev">${icon('chevron-down', 18)}</span></summary>
+        <summary><h2 class="panel-h">${t('lesson.glossary')}</h2><span class="cnt tnum">${l.glossary.length}</span><span class="chev">${icon('chevron-down', 18)}</span></summary>
         <dl lang="en">
           ${l.glossary.map(([term, meaning, k]) => `<div class="entry" data-kind="${k || l.kind}"><dt>${esc(term)}</dt><dd>${esc(meaning)}</dd></div>`).join('')}
         </dl>
@@ -394,16 +444,16 @@ function viewLesson(n) {
   </div>
 
   <nav class="pager" aria-label="${esc(t('nav.lessons'))}">
-    ${prev ? `<a class="card" href="${lessonUrl(prev.n)}"><span class="arrow">${icon('arrow-left', 18)}</span><span><small>${t('lesson.prev')}</small><b>${prev.n}. ${esc(prev.title)}</b></span></a>` : '<span></span>'}
-    ${next ? `<a class="card next" href="${lessonUrl(next.n)}"><span class="arrow">${icon('arrow-right', 18)}</span><span><small>${t('lesson.next')}</small><b>${next.n}. ${esc(next.title)}</b></span></a>`
-      : `<a class="card next" href="#/darslar"><span class="arrow">${icon('layout-grid', 18)}</span><span><small>${t('all.lessons')}</small><b>${t('nav.lessons')}</b></span></a>`}
+    ${prev ? `<a class="pg" href="${lessonUrl(prev.n)}"><span class="round-arrow">${icon('arrow-left', 16)}</span><span><small>${t('lesson.prev')}</small><b>${pad2(prev.n)} · ${esc(prev.title)}</b></span></a>` : '<span></span>'}
+    ${next ? `<a class="pg next" href="${lessonUrl(next.n)}"><span class="round-arrow">${icon('arrow-right', 16)}</span><span><small>${t('lesson.next')}</small><b>${pad2(next.n)} · ${esc(next.title)}</b></span></a>`
+      : `<a class="pg next" href="#/darslar"><span class="round-arrow">${icon('layout-grid', 16)}</span><span><small>${t('all.lessons')}</small><b>${t('nav.lessons')}</b></span></a>`}
   </nav></div>`;
 }
 
 function practiceHtml(l, pr) {
   const { done, total } = progressCount(l.n, pr);
-  return `<section class="card pad practice-top" id="practice">
-      <div class="block-head"><span class="tile sm soft" style="--k:#0EA5B7">${icon('list-checks', 20)}</span><h2 class="h3">${t('ex.practiceTitle')}</h2></div>
+  return `<section class="panel practice-top" id="practice">
+      <h2 class="panel-h">${t('ex.practiceTitle')}</h2>
       <p class="note">${t('ex.practiceSub')}</p>
       <div class="lprog"><div class="lprog-row"><b data-prog-text>${t('ex.progress', done, total)}</b><button class="link-btn" type="button" data-reset>${icon('repeat', 14)} ${t('ex.resetAll')}</button></div>
       <div class="bar big"><span data-prog-bar style="width:${Math.round((done / total) * 100)}%"></span></div></div>
@@ -431,13 +481,6 @@ function bindLesson() {
     document.querySelector('[data-reset]')?.addEventListener('click', () => {
       if (window.confirm(t('ex.resetConfirm'))) { clearLesson(n); render(); }
     });
-    main.querySelectorAll('.idi').forEach((b) => b.addEventListener('click', () => {
-      const open = b.getAttribute('aria-expanded') === 'true';
-      b.setAttribute('aria-expanded', String(!open));
-      const next = b.nextElementSibling;
-      if (open && next?.classList.contains('idi-tip')) next.remove();
-      if (!open) b.insertAdjacentHTML('afterend', `<span class="idi-tip" role="note">${esc(b.dataset.m)}</span>`);
-    }));
   }
   const gloss = document.getElementById('gloss');
   if (gloss && window.matchMedia('(max-width: 999px)').matches) gloss.open = false;
@@ -458,21 +501,17 @@ function openViewer(src, alt) {
 
 /* ---------- Lug‘at ---------- */
 function viewGlossary(params) {
-  return `<section>
-    <div class="page-head">
-      <p class="eyebrow">${t('glossary.eyebrow')}</p>
-      <h1 class="h1">${t('glossary.title')}</h1>
-      <p class="sub">${t('glossary.lead', MERGED.length)}</p>
-    </div>
+  return `<section class="wrap page">
+    ${pageHead(t('glossary.title'), t('glossary.lead', MERGED.length))}
     <div class="gl-tools">
-      <label class="search-box">${icon('search', 20)}<input id="gl-q" type="search" autocomplete="off" placeholder="${esc(t('glossary.search'))}" aria-label="${esc(t('glossary.search'))}" value="${esc(params.get('q') || '')}"></label>
+      <label class="search-box">${icon('search', 19)}<input id="gl-q" type="search" autocomplete="off" placeholder="${esc(t('glossary.search'))}" aria-label="${esc(t('glossary.search'))}" value="${esc(params.get('q') || '')}"></label>
       <select class="select" id="gl-lesson" aria-label="${esc(t('glossary.lesson'))}">
         <option value="">${t('glossary.allLessons')}</option>
-        ${LESSONS.map((l) => `<option value="${l.n}" ${params.get('dars') == l.n ? 'selected' : ''}>${l.n}. ${esc(l.title)}</option>`).join('')}
+        ${LESSONS.map((l) => `<option value="${l.n}" ${params.get('dars') == l.n ? 'selected' : ''}>${pad2(l.n)} · ${esc(l.title)}</option>`).join('')}
       </select>
     </div>
-    <div class="filters-row">${filtersHtml('glossary', ['idiom', 'phrasal', 'phrase', 'vocab'])}</div>
-    <div class="gl-status"><span id="gl-count" aria-live="polite"></span><button class="btn secondary sm" type="button" id="gl-clear">${icon('x', 14)} ${t('glossary.clear')}</button></div>
+    <div class="center filters-row">${filtersHtml('glossary', ['idiom', 'phrasal', 'phrase', 'vocab'])}</div>
+    <div class="gl-status"><span id="gl-count" aria-live="polite"></span><button class="btn ghost sm" type="button" id="gl-clear">${icon('x', 14)} ${t('glossary.clear')}</button></div>
     <div id="gl-results"></div>
   </section>`;
 }
@@ -500,11 +539,11 @@ function bindGlossary() {
       groups.get(L).push(e);
     }
     out.innerHTML = [...groups].map(([L, items]) => `<div class="gl-group">
-      <h2 class="gl-letter"><b>${esc(L)}</b></h2>
-      <ul class="gl-list" lang="en">${items.map((e) => `<li class="card gl-item" data-kind="${e.kind}">
+      <h2 class="gl-letter">${esc(L)}</h2>
+      <ul class="gl-list" lang="en">${items.map((e) => `<li class="gl-item" data-kind="${e.kind}">
         <span class="gl-term">${esc(e.term)}</span>
         <div class="gl-meaning">${e.meanings.map((m) => `<p>${esc(m)}</p>`).join('')}</div>
-        <span class="gl-lessons">${e.lessons.map((n) => `<a href="${lessonUrl(n)}" lang="${getLang()}">${t('lesson.label', n)}</a>`).join('')}</span>
+        <span class="gl-lessons">${e.lessons.map((n) => `<a href="${lessonUrl(n)}" lang="${getLang()}">${pad2(n)}</a>`).join('')}</span>
       </li>`).join('')}</ul>
     </div>`).join('');
   };
@@ -522,35 +561,29 @@ function bindGlossary() {
 /* ---------- Kitob haqida ---------- */
 function viewAbout() {
   const annLang = getLang() === 'en' ? 'en' : 'uz';
-  const sec = (ic, title, body, color) => `<section class="card pad" style="--k:${color}">
-      <div class="block-head"><span class="tile sm soft">${icon(ic, 20)}</span><h2 class="h3">${title}</h2></div>${body}</section>`;
-  return `<div class="stack"><section>
-    <div class="page-head">
-      <p class="eyebrow">${t('about.eyebrow')}</p>
-      <h1 class="h1" lang="en">${esc(BOOK.title)}</h1>
-      <p class="sub" lang="en">${esc(BOOK.subtitle)}</p>
-    </div>
-  </section>
+  const sec = (title, body) => `<section class="panel"><h2 class="panel-h">${title}</h2>${body}</section>`;
+  return `<div class="wrap page">
+  ${pageHead(esc(BOOK.title), `<span lang="en">${esc(BOOK.subtitle)}</span>`)}
   <div class="about-grid">
     <aside class="about-side">
       <img class="cover-img" src="img/cover.webp" width="800" height="1132" alt="“Phraseo-Barrier Matrix” kitobi muqovasi">
-      <dl class="card pad">
+      <dl class="panel">
         <div><dt>${t('about.author')}</dt><dd>${esc(BOOK.author)}</dd></div>
         <div><dt>${t('about.reviewers')}</dt>${BOOK.reviewers.map((r) => `<dd>${esc(r.name)}<span>${esc(pick(r.role))}</span></dd>`).join('')}</div>
         <div><dt>OTM</dt><dd>${esc(pick(BOOK.university))}<span>${esc(pick(BOOK.program))}. ${esc(pick(BOOK.city))}</span></dd></div>
       </dl>
     </aside>
     <div class="about-main">
-      ${sec('file-text', t('about.annotation'), `<div class="seg tabs" role="tablist">
+      ${sec(t('about.annotation'), `<div class="seg tabs" role="tablist">
           ${[['uz', 'O‘zbekcha'], ['en', 'English'], ['ru', 'Русский']].map(([k, label]) => `<button role="tab" type="button" data-ann="${k}" aria-selected="${k === annLang}" aria-pressed="${k === annLang}">${label}</button>`).join('')}
         </div>
-        <div class="prose" id="ann" lang="${annLang}"><p>${esc(BOOK.annotation[annLang])}</p></div>`, '#2563EB')}
-      ${sec('book-open', t('about.intro'), `<div class="prose" lang="en">${BOOK.introduction.map((p) => `<p>${esc(p)}</p>`).join('')}</div>`, '#4F46E5')}
-      ${sec('target', t('about.aims'), `<ol class="numlist" lang="en">${BOOK.aims.map((a) => `<li>${esc(a)}</li>`).join('')}</ol>`, '#059669')}
-      ${sec('layers', t('about.features'), `<div class="feat" lang="en">${BOOK.features.map(([k, v]) => `<div><b>${esc(k)}</b><span>${esc(v)}</span></div>`).join('')}</div>`, '#7C3AED')}
-      ${sec('lightbulb', t('about.why'), `<div class="prose" lang="en"><p>${esc(BOOK.whyText)}</p></div>`, '#D97706')}
-      ${sec('list-checks', t('about.types'), `<ol class="numlist" lang="en">${BOOK.exerciseTypes.map((a) => `<li>${esc(a)}</li>`).join('')}</ol>`, '#0EA5B7')}
-      ${sec('graduation-cap', t('about.tips'), `<ol class="numlist" lang="en">${BOOK.tips.map((a) => `<li>${esc(a)}</li>`).join('')}</ol><p class="note" style="margin:18px 0 0">${t('about.note')}</p>`, '#DB2777')}
+        <div class="prose" id="ann" lang="${annLang}"><p>${esc(BOOK.annotation[annLang])}</p></div>`)}
+      ${sec(t('about.intro'), `<div class="prose" lang="en">${BOOK.introduction.map((p) => `<p>${esc(p)}</p>`).join('')}</div>`)}
+      ${sec(t('about.aims'), `<ol class="numlist" lang="en">${BOOK.aims.map((a) => `<li>${esc(a)}</li>`).join('')}</ol>`)}
+      ${sec(t('about.features'), `<div class="feat" lang="en">${BOOK.features.map(([k, v]) => `<div><b>${esc(k)}</b><span>${esc(v)}</span></div>`).join('')}</div>`)}
+      ${sec(t('about.why'), `<div class="prose" lang="en"><p>${esc(BOOK.whyText)}</p></div>`)}
+      ${sec(t('about.types'), `<ol class="numlist" lang="en">${BOOK.exerciseTypes.map((a) => `<li>${esc(a)}</li>`).join('')}</ol>`)}
+      ${sec(t('about.tips'), `<ol class="numlist" lang="en">${BOOK.tips.map((a) => `<li>${esc(a)}</li>`).join('')}</ol><p class="note" style="margin:18px 0 0">${t('about.note')}</p>`)}
     </div>
   </div></div>`;
 }
@@ -571,28 +604,33 @@ function parseHash() {
 }
 
 function render() {
+  cleanup.forEach((fn) => fn());
+  cleanup = [];
   const { parts, params } = parseHash();
   const route = parts[0] || '';
-  let html; let bind = () => {}; let title = 'Phraseo-Barrier Matrix — ingliz idiomalari'; let navKey = 'home';
+  const site = 'Phrasebar';
+  let html; let bind = () => {}; let title = `${site} — ${t('w.heroTitle').toLowerCase()}`; let navKey = 'home';
 
-  if (route === 'darslar') { html = viewLessons(); bind = bindLessons; title = `${t('nav.lessons')} — Phraseo-Barrier Matrix`; navKey = 'darslar'; }
+  if (route === 'darslar') { html = viewLessons(params); bind = bindLessons; title = `${t('nav.lessons')} — ${site}`; navKey = 'darslar'; }
   else if (route === 'dars') {
     const n = Number(parts[1]);
     html = viewLesson(n); bind = bindLesson; navKey = 'darslar';
     const l = LESSONS.find((x) => x.n === n);
-    if (l) title = `${l.n}. ${l.title} — Phraseo-Barrier Matrix`;
+    if (l) title = `${pad2(l.n)} · ${l.title} — ${site}`;
   }
-  else if (route === 'lugat') { html = viewGlossary(params); bind = bindGlossary; title = `${t('nav.glossary')} — Phraseo-Barrier Matrix`; navKey = 'lugat'; }
-  else if (route === 'kitob') { html = viewAbout(); bind = bindAbout; title = `${t('nav.about')} — Phraseo-Barrier Matrix`; navKey = 'kitob'; }
+  else if (route === 'lugat') { html = viewGlossary(params); bind = bindGlossary; title = `${t('nav.glossary')} — ${site}`; navKey = 'lugat'; }
+  else if (route === 'kitob') { html = viewAbout(); bind = bindAbout; title = `${t('nav.about')} — ${site}`; navKey = 'kitob'; }
   else { html = viewHome(); bind = bindHome; }
 
   main.innerHTML = html;
+  document.body.dataset.page = navKey;
   document.title = title;
   document.querySelectorAll('[data-route]').forEach((a) => {
     if (a.dataset.route === navKey) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
   });
   closeMenu();
   bind();
+  revealOnView();
 }
 
 function onNavigate() {
@@ -623,6 +661,10 @@ menuBtn.addEventListener('click', () => {
   menuBtn.innerHTML = icon(open ? 'x' : 'menu', 18);
 });
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
+
+// Header: sahifa pastga tushganda soya paydo bo‘ladi
+const header = document.querySelector('.site-header');
+window.addEventListener('scroll', () => header.classList.toggle('scrolled', window.scrollY > 8), { passive: true });
 
 document.querySelectorAll('[data-lang]').forEach((b) => b.addEventListener('click', () => {
   if (b.dataset.lang === getLang()) return;

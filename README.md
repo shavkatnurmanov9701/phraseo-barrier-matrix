@@ -1,4 +1,4 @@
-# Phraseo-Barrier Matrix — veb-sayt
+# phrasebar — “Phraseo-Barrier Matrix” veb-sayti
 
 **“Phraseo-Barrier Matrix”** o‘quv qo‘llanmasining elektron hamrohi.
 Muallif: **Jumayeva Sadbarg Mirolimovna**. O‘zbekiston davlat jahon tillari universiteti, Ingliz tili 3-fakulteti, 2026.
@@ -9,8 +9,9 @@ Sayt 1-kurs talabalariga (2-semestr) ingliz idiomalari, frazali fe’llar va kol
 
 ```
 index.html            — sayt qobig‘i (header, footer)
-css/style.css         — dizayn (EnNote dizayn tizimi asosida)
-css/fonts.css         — shriftlar (Bricolage Grotesque, Figtree, JetBrains Mono — o‘z serverimizda)
+css/style.css         — dizayn (oq fon, kulrang kartochkalar, rangli bloklar)
+css/fonts.css         — shrift (Inter Tight — o‘z serverimizda)
+js/art.js             — SVG illyustratsiyalar
 js/icons.js           — Lucide ikonkalari
 js/practice.js        — interaktiv mashqlar mexanizmi
 js/data/practice/     — darslar bo‘yicha mashqlar (l01.js …)
@@ -56,4 +57,4 @@ python3 -m http.server 8000
 
 ## Litsenziya
 
-Kitob matni va rasmlari muallifga tegishli. Shriftlar: Bricolage Grotesque, Figtree, JetBrains Mono (SIL Open Font License). Ikonkalar: Lucide (ISC).
+Kitob matni va rasmlari muallifga tegishli. Shrift: Inter Tight (SIL Open Font License). Ikonkalar: Lucide (ISC).
