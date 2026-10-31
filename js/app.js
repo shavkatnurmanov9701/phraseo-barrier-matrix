@@ -305,7 +305,8 @@ function viewLesson(n) {
   const lang = getLang() === 'en' ? 'en' : 'uz';
 
   const pr = PRACTICE[l.n];
-  const storyBlock = pr?.story
+  // Hikoya: kitobdagi sahifa (rasm) bo‘lsa, o‘sha ko‘rsatiladi (egasi shuni tanladi)
+  const storyBlock = pr?.story && !l.poster
     ? `<p class="note">${t('lesson.tapIdiom')}</p>
        <div class="story-text" lang="en">${storyHtml(pr.story, l.glossary)}</div>
        ${l.poster ? `<button class="btn secondary sm" type="button" data-zoom="${l.poster}" data-alt="${esc(l.title)}" style="margin-top:20px">${icon('book-open', 15)} ${t('lesson.showPoster')}</button>` : ''}`

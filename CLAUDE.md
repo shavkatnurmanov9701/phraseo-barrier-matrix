@@ -23,13 +23,14 @@ Every push to `main` goes live in 1–2 minutes, so test locally first (`python3
 ## Interactive lessons
 - Exercise kinds: `match`, `gap` (word bank + select), `tf`, `mcq`, `hunt` (tap idiom words + meaning),
   `sentences` / `essay` (writing; idioms detected with `idiomMatcher`, autosaved in localStorage).
-- Story text uses `[[shown|Glossary term]]` markup → tappable idioms with their meaning.
+- Stories are shown as the **book page image** (owner's choice, 2026-11-01). `story` text in practice files is kept
+  only as data (markup `[[shown|Glossary term]]`), it is displayed only for lessons without a poster.
 - Progress: localStorage `pbm-progress` (per lesson), drafts `pbm-w-<lesson>-<id>`.
-- The owner postponed voice-over/karaoke reading for stories (asked 2026-11-01): don't build it until asked.
+- No audio / karaoke for stories (owner decided 2026-11-01). Don't build it unless asked.
 
 ## Domain
 - phrasebar.uz (registrar PS Cloud, DNS zone on ns1/ns2.pscloud.uz): 4 A records → GitHub Pages IPs, www CNAME → shavkatnurmanov9701.github.io.
-  `CNAME` file in the repo was created by GitHub — keep it.
+  Custom domain was removed from Pages on 2026-11-01 until DNS propagates; the owner re-adds it in Settings → Pages.
 
 ## Stages
 1. ✅ Structure and design (EnNote style)
