@@ -15,8 +15,8 @@ Every push to `main` goes live in 1–2 minutes, so test locally first (`python3
   accent blocks: violet #4F2BEF, pink #F2509A, yellow #FFC93C, orange #FF6A2B, periwinkle #6470F0. Pill nav + black CTA button.
 - Home (owner 2026-11-01: book + lessons must be at the top, interactive): hero = book title “Phraseo-Barrier Matrix” →
   violet card with a **3D book** whose cover opens on scroll / tap (back of cover = book info, right page = clickable
-  “Mundarija” with book page numbers; on phones (≤760px) it is a single-page 3D book: cover → info leaf → contents,
-  pages flip left; segmented control Muqova / Kitob haqida / Mundarija under it) → “Kitobdagi darslar”: 01/02/03 type cards
+  “Mundarija” with book page numbers; on phones (≤760px) the same two-page spread is drawn at 600px
+  and scaled down with `--bk` (owner asked for the desktop look on phones, 2026-11-01)) → “Kitobdagi darslar”: 01/02/03 type cards
   act as filters + lesson cards → idiom of the day → rolling idiom chip → statement → big numbers → FAQ → CTA.
 - Illustrations are hand-drawn SVG in `js/art.js` (literal idioms: cow over the moon, piece of cake, ice cube, spilled beans, heart).
   AI image generation was unavailable (ElevenLabs out of credits, Canva disabled, HF invoke off). Swap in real 3D renders later if provided.

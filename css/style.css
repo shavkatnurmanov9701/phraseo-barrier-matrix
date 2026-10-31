@@ -603,64 +603,35 @@ button.type[aria-pressed="true"] .type-card { box-shadow: 0 0 0 4px #fff, 0 0 0 
 /* Faqat telefonda ko‘rinadigan qismlar */
 .info-leaf, .book-nav { display: none; }
 
-/* Telefon: bitta sahifali 3D kitob — muqova va varaqlar chapga varaqlanadi */
-@media (max-width: 760px) {
-  .layer.v.book-stage { padding: 34px 14px 26px; perspective: 1400px; }
-  .book { width: min(290px, 76vw); aspect-ratio: .6; margin: 0 auto;
-    transform: rotateY(calc(-22deg * (1 - var(--o)))) rotateX(calc(8deg * (1 - var(--o)))); }
-  .book-page.right, .info-leaf, .book-cover { left: 0; width: 100%; }
-  .book-page.right { border-radius: 3px 14px 14px 3px; }
-  .info-leaf { display: block; position: absolute; top: 0; height: 100%; z-index: 2; background: #fff; border-radius: 3px 14px 14px 3px;
-    transform-origin: left center; transform: rotateY(0); backface-visibility: hidden; -webkit-backface-visibility: hidden; cursor: pointer;
-    box-shadow: 3px 0 0 #EEEBFA, 6px 0 0 #E1DCF6, 0 30px 50px -24px rgb(20 6 90 / .6); }
-  .book.animating .info-leaf { transition: transform .85s cubic-bezier(.3,.7,.2,1); }
-  .book[data-leaf="2"] .info-leaf { transform: rotateY(-178deg); }
-  .info-leaf::before { content: ''; position: absolute; inset: 0 auto 0 0; width: 26px; background: linear-gradient(90deg, rgb(30 10 120 / .12), transparent); pointer-events: none; }
-  .book-cover { transform: rotateY(calc(-178deg * var(--o))); }
-  .face.back { display: none; }
-  .face.front { border-radius: 3px 14px 14px 3px; }
-  .open-hint { bottom: 12px; height: 34px; font-size: 12.5px; }
-  .page-inner { padding: 18px 16px; }
-  .inner-title { font-size: 24px; }
-  .inner-facts { margin: 12px 0; gap: 8px; }
-  .inner-facts dd { font-size: 12.5px; }
-  .inner-sub { font-size: 12px; }
-  .turn-hint { position: absolute; right: 14px; bottom: 12px; display: inline-flex; align-items: center; gap: 4px; padding: 6px 12px; border-radius: 999px; background: var(--violet); color: #fff; font-size: 12px; font-weight: 500; }
-  .toc { gap: 0; }
-  .toc a { padding: 2px 2px; font-size: 11.5px; line-height: 1.45; gap: 6px; }
-  .book-page.right .page-inner { padding: 14px 14px; }
-  .toc-t { max-width: 66%; }
-  .page-kicker { padding-bottom: 6px; margin-bottom: 6px; font-size: 11.5px; }
-  .book-nav { display: inline-flex; position: relative; z-index: 5; margin-top: 26px; gap: 2px; padding: 4px; border-radius: 999px; background: rgb(255 255 255 / .16); }
-  .book-nav button { border: 0; background: transparent; color: rgb(255 255 255 / .85); height: 32px; padding: 0 12px; border-radius: 999px; font-size: 13px; font-weight: 500; cursor: pointer; }
-  .book-nav button[aria-pressed="true"] { background: #fff; color: var(--ink); }
-  .stage-hint { display: none; }
-  .float { display: block; }
-  .f1 { left: 4px; top: 8px; width: 62px; height: 62px; }
-  .f2 { right: 6px; top: 14px; width: 54px; height: 50px; }
-  .f3 { right: 2px; bottom: 70px; width: 66px; height: 66px; }
-  .f4 { left: 4px; bottom: 74px; width: 50px; height: 50px; }
-  .f5 { display: none; }
-  .book-stage { display: flex !important; flex-direction: column; align-items: center; }
-}
-
 /* Sahifalar bir tekislikda "miltillab" yo‘qolmasligi uchun har biriga alohida chuqurlik (translateZ) */
 .book-page.right { transform: translateZ(0); }
 .book-cover { transform: translateZ(2px) rotateY(calc(-178deg * var(--o))); }
 .leaf-back { display: none; }
+/* Telefon: xuddi kompyuterdagi kabi ikki betli 3D kitob, faqat kichraytirilgan.
+   Kitob 600px kenglikda chiziladi va ekranga sig‘ishi uchun --bk marta kichraytiriladi. */
+.book-fit { width: 100%; display: flex; justify-content: center; }
 @media (max-width: 760px) {
-  .book-cover { transform: translateZ(3px) rotateY(calc(-178deg * var(--o))); }
-  /* Varaqlangan sahifa yo‘qolmaydi: orqa tomoni qog‘oz bo‘lib chap tomonda yotadi */
-  .info-leaf { transform-style: preserve-3d; backface-visibility: visible; -webkit-backface-visibility: visible; background: transparent; box-shadow: none;
-    transform: translateZ(1.5px) rotateY(0); }
-  .book[data-leaf="2"] .info-leaf { transform: translateZ(1.5px) rotateY(-172deg); }
-  .info-leaf > .page-inner { position: absolute; inset: 0; background: #fff; border-radius: 3px 14px 14px 3px; backface-visibility: hidden; -webkit-backface-visibility: hidden;
-    box-shadow: 3px 0 0 #EEEBFA, 6px 0 0 #E1DCF6, 0 30px 50px -24px rgb(20 6 90 / .6); }
-  .leaf-back { display: block; position: absolute; inset: 0; border-radius: 14px 3px 3px 14px; transform: rotateY(180deg); backface-visibility: hidden; -webkit-backface-visibility: hidden;
-    background: repeating-linear-gradient(#fff 0 18px, #EEF0FA 18px 19px); box-shadow: -3px 0 0 #EEEBFA, -6px 0 0 #E1DCF6; }
-  .info-leaf::before { z-index: 1; }
-  .book-cover { transform: translateZ(3px) rotateY(calc(-172deg * var(--o))); }
-  .face.back { display: block; background: repeating-linear-gradient(#fff 0 18px, #EEF0FA 18px 19px); border-radius: 14px 3px 3px 14px; }
-  .face.back > .page-inner { visibility: hidden; }
-  .face.back::after { display: block; }
+  .layer.v.book-stage { padding: 30px 10px 44px; perspective: 1600px; }
+  .book-fit { width: calc(600px * var(--bk, .6)); height: calc(425px * var(--bk, .6)); display: block; position: relative; z-index: 2; }
+  .book { width: 600px; aspect-ratio: auto; height: 425px; transform-origin: 0 0;
+    transform: scale(var(--bk, .6)) translateX(calc(-25% * (1 - var(--o)))) rotateX(calc(10deg * (1 - var(--o)))) rotateZ(calc(-2deg * (1 - var(--o)))); }
+  .page-inner { padding: 16px 16px; }
+  .page-kicker { font-size: 12px; padding-bottom: 6px; margin-bottom: 6px; }
+  .inner-title { font-size: 26px; }
+  .inner-sub { font-size: 12.5px; margin-top: 4px; }
+  .inner-facts { margin: 12px 0; gap: 8px; }
+  .inner-facts dt { font-size: 11px; }
+  .inner-facts dd { font-size: 13px; line-height: 1.3; }
+  .toc { gap: 0; }
+  .toc a { font-size: 12px; line-height: 1.3; padding: 1.5px 4px; gap: 6px; }
+  .toc-t { max-width: 74%; }
+  .open-hint { bottom: 14px; }
+  .stage-hint { bottom: 14px; font-size: 12px; }
+  .float { display: block; }
+  .f1 { left: 4px; top: 6px; width: 54px; height: 54px; }
+  .f2 { right: 6px; top: 8px; width: 46px; height: 42px; }
+  .f3 { right: 4px; bottom: 6px; width: 52px; height: 52px; }
+  .f4 { left: 6px; bottom: 8px; width: 40px; height: 40px; }
+  .f5 { display: none; }
 }
+.book-stage:has(.book[data-open="true"]) .stage-hint { opacity: 0; }

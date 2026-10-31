@@ -215,7 +215,7 @@ function viewHome() {
         <span class="float f3" aria-hidden="true">${sticker('cake', 'fc')}</span>
         <span class="float f4" aria-hidden="true">${sticker('ice', 'fi')}</span>
         <span class="float f5" aria-hidden="true">${sticker('cow', 'fw')}</span>
-        ${bookHtml()}
+        <div class="book-fit" id="book-fit">${bookHtml()}</div>
         <div class="book-nav" role="group" aria-label="${esc(t('w.openBook'))}">
           <button type="button" data-goto="0" aria-pressed="true">${t('w.cover')}</button>
           <button type="button" data-goto="1" aria-pressed="false">${t('nav.about')}</button>
@@ -433,6 +433,17 @@ function bindHome() {
     forced = 1; book.classList.add('animating'); setOpen(1);
     setTimeout(() => book.classList.remove('animating'), 900);
   });
+
+  // Telefonda kitobni ekranga sig‘diradigan masshtab
+  const fit = document.getElementById('book-fit');
+  const fitBook = () => {
+    const stage = fit.parentElement;
+    const avail = stage.clientWidth - 20;
+    fit.style.setProperty('--bk', Math.min(1, avail / 600).toFixed(4));
+  };
+  fitBook();
+  window.addEventListener('resize', fitBook);
+  cleanup.push(() => window.removeEventListener('resize', fitBook));
 
   const words = [...document.querySelectorAll('#statement .w, #statement .inline-sticker')];
   onScrollFx(() => {
