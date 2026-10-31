@@ -13,9 +13,10 @@ Every push to `main` goes live in 1–2 minutes, so test locally first (`python3
 - Brand name on the site: **phrasebar** (lowercase wordmark), domain phrasebar.uz. Book title stays “Phraseo-Barrier Matrix”.
 - White background, light-weight big headings (Inter Tight 400, tight letter-spacing, centered), grey cards (#F4F4F7, radius 28),
   accent blocks: violet #4F2BEF, pink #F2509A, yellow #FFC93C, orange #FF6A2B, periwinkle #6470F0. Pill nav + black CTA button.
-- Home: hero → card stack (yellow/pink/violet) that opens up on scroll → idiom-of-the-day + stats → rolling yellow idiom chip →
-  01/02/03 tilted cards (idioms / phrasal verbs / collocations) → statement that darkens word by word on scroll → big numbers →
-  lessons → book (masonry) → FAQ → periwinkle CTA.
+- Home (owner 2026-11-01: book + lessons must be at the top, interactive): hero = book title “Phraseo-Barrier Matrix” →
+  violet card with a **3D book** whose cover opens on scroll / tap (back of cover = book info, right page = clickable
+  “Mundarija” with book page numbers; on phones it stacks: cover, info, contents) → “Kitobdagi darslar”: 01/02/03 type cards
+  act as filters + lesson cards → idiom of the day → rolling idiom chip → statement → big numbers → FAQ → CTA.
 - Illustrations are hand-drawn SVG in `js/art.js` (literal idioms: cow over the moon, piece of cake, ice cube, spilled beans, heart).
   AI image generation was unavailable (ElevenLabs out of credits, Canva disabled, HF invoke off). Swap in real 3D renders later if provided.
 - Font self-hosted in `fonts/` (Inter Tight); icons are Lucide paths in `js/icons.js`.

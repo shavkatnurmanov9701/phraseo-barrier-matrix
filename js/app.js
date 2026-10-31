@@ -126,6 +126,38 @@ function cardsHtml(filter, limit = 0) {
 }
 
 /* ---------- Bosh sahifa ---------- */
+// 3D kitob: muqova (oldi — kitob muqovasi, orqasi — kitob haqida), o‘ng sahifa — mundarija
+function bookHtml() {
+  const toc = LESSONS.map((l) => `<li data-kind="${l.kind}"><a href="${lessonUrl(l.n)}">
+      <span class="toc-n tnum">${pad2(l.n)}</span><span class="toc-t" lang="en">${esc(l.title)}</span><span class="toc-dots" aria-hidden="true"></span><span class="toc-p tnum">${l.page}</span>
+    </a></li>`).join('');
+  return `<div class="book" id="book" data-open="false">
+    <div class="book-page right">
+      <div class="page-inner">
+        <p class="page-kicker">${t('w.contents')}</p>
+        <ol class="toc">${toc}</ol>
+      </div>
+    </div>
+    <div class="book-cover" role="button" tabindex="0" aria-controls="book" aria-label="${esc(t('w.openBook'))}" data-book-toggle>
+      <div class="face front"><img src="img/cover.webp" width="800" height="1132" alt="“Phraseo-Barrier Matrix” — ${esc(BOOK.author)}"><span class="open-hint">${icon('book-open', 15)} ${t('w.openBook')}</span></div>
+      <div class="face back">
+        <div class="page-inner">
+          <p class="page-kicker">${t('w.studyGuide')}</p>
+          <h3 class="inner-title">Phraseo-Barrier Matrix</h3>
+          <p class="inner-sub" lang="en">${esc(BOOK.subtitle)}</p>
+          <dl class="inner-facts">
+            <div><dt>${t('about.author')}</dt><dd>${esc(BOOK.author)}</dd></div>
+            <div><dt>${t('about.reviewers')}</dt><dd>${BOOK.reviewers.map((r) => esc(r.name)).join('<br>')}</dd></div>
+            <div><dt>OTM</dt><dd>${esc(pick(BOOK.university))}</dd></div>
+            <div><dt>${t('w.edition')}</dt><dd>${esc(pick(BOOK.city))}</dd></div>
+          </dl>
+          <a class="link" href="#/kitob">${t('w.aboutBook')} ${icon('arrow-right', 14)}</a>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
 function viewHome() {
   const kindStats = ['idiom', 'phrasal', 'phrase'].map((k) => ({ k, lessons: LESSONS.filter((l) => l.kind === k).length, entries: MERGED.filter((e) => e.kind === k).length }));
   const maxEntries = Math.max(...kindStats.map((x) => x.entries));
@@ -148,20 +180,51 @@ function viewHome() {
 
   return `
   <section class="hero wrap">
-    <h1 class="display hero-title reveal">${t('w.heroTitle')}</h1>
-    <p class="lede reveal">${t('w.heroSub')}</p>
+    <p class="hero-badge reveal"><img src="img/cover-sm.webp" width="400" height="566" alt=""> ${t('w.studyGuide')} · ${esc(BOOK.authorShort)}</p>
+    <h1 class="display hero-title reveal">Phraseo-Barrier Matrix</h1>
+    <p class="lede reveal">${t('w.bookLede')}</p>
     <div class="hero-actions reveal">
-      <a class="btn violet" href="#/darslar">${t('w.start')}</a>
-      <a class="btn ghost" href="#/lugat">${t('w.glossary')}</a>
+      <button class="btn violet" type="button" data-open-book>${icon('book-open', 16)} ${t('w.openBook')}</button>
+      <a class="btn ghost" href="#/dars/1">${t('w.startFirst')}</a>
     </div>
   </section>
 
-  <section class="stack-wrap" id="stack" aria-label="Phrasebar">
+  <section class="stack-wrap" id="stack" aria-label="Phraseo-Barrier Matrix">
     <div class="stack">
       <div class="layer y" aria-hidden="true"></div>
       <div class="layer p" aria-hidden="true"></div>
-      <div class="layer v">${heroScene('hs')}</div>
+      <div class="layer v book-stage">
+        <span class="float f1" aria-hidden="true">${sticker('moon', 'fm')}</span>
+        <span class="float f2" aria-hidden="true">${sticker('heart', 'fh')}</span>
+        <span class="float f3" aria-hidden="true">${sticker('cake', 'fc')}</span>
+        <span class="float f4" aria-hidden="true">${sticker('ice', 'fi')}</span>
+        <span class="float f5" aria-hidden="true">${sticker('cow', 'fw')}</span>
+        ${bookHtml()}
+        <p class="stage-hint" aria-hidden="true">${t('w.scrollHint')}</p>
+      </div>
     </div>
+  </section>
+
+  <section class="section wrap" id="lessons" aria-labelledby="h-lessons">
+    <h2 class="display h2 center reveal" id="h-lessons">${t('w.lessonsTitle')}</h2>
+    <p class="lede reveal">${t('w.lessonsLede')}</p>
+    <div class="types">
+      ${typeCards.map((c, i) => {
+        const st = kindStats.find((x) => x.k === c.k);
+        return `<button class="type reveal" type="button" data-type="${c.k}" aria-pressed="false" style="--i:${i}">
+          <span class="type-label">${esc(kindLabel(c.k))}<br><span class="muted">${t('w.lessonsOf', st.lessons)} · ${t('w.entriesN', st.entries)}</span></span>
+          <span class="type-card ${c.cls}">
+            <span class="type-pill">${esc(kindLabel(c.k))}</span>
+            <span class="type-art">${c.art}</span>
+            <span class="type-num">${pad2(i + 1)}</span>
+            <span class="type-go" aria-hidden="true">${icon('arrow-right', 16)}</span>
+          </span>
+        </button>`;
+      }).join('')}
+    </div>
+    <div class="center filters-row">${filtersHtml('home')}</div>
+    <div class="grid-cards" id="cards">${cardsHtml('all', 6)}</div>
+    <p class="center" style="margin-top:28px"><a class="btn dark" href="#/darslar">${t('w.allLessons')}</a></p>
   </section>
 
   <section class="section wrap">
@@ -192,24 +255,6 @@ function viewHome() {
   </section>
 
   <section class="section wrap">
-    <h2 class="display h2 center reveal">${t('w.typesTitle')}</h2>
-    <div class="types">
-      ${typeCards.map((c, i) => {
-        const st = kindStats.find((x) => x.k === c.k);
-        return `<a class="type reveal" href="#/darslar?tur=${c.k}" style="--i:${i}">
-          <span class="type-label">${esc(kindLabel(c.k))}<br><span class="muted">${t('w.lessonsOf', st.lessons)} · ${t('w.entriesN', st.entries)}</span></span>
-          <span class="type-card ${c.cls}">
-            <span class="type-pill">${esc(kindLabel(c.k))}</span>
-            <span class="type-art">${c.art}</span>
-            <span class="type-num">${pad2(i + 1)}</span>
-            <span class="type-go" aria-hidden="true">${icon('arrow-right', 16)}</span>
-          </span>
-        </a>`;
-      }).join('')}
-    </div>
-  </section>
-
-  <section class="section wrap">
     <p class="statement" id="statement">${statement}</p>
   </section>
 
@@ -223,27 +268,6 @@ function viewHome() {
     </ul>
   </section>
 
-  <section class="section wrap" aria-labelledby="h-lessons">
-    <h2 class="display h2 center reveal" id="h-lessons">${t('w.lessonsTitle')}</h2>
-    <div class="center filters-row">${filtersHtml('home')}</div>
-    <div class="grid-cards" id="cards">${cardsHtml('all', 6)}</div>
-    <p class="center" style="margin-top:28px"><a class="btn dark" href="#/darslar">${t('w.allLessons')}</a></p>
-  </section>
-
-  <section class="section wrap">
-    <h2 class="display h2 center reveal">${t('w.bookTitle')}</h2>
-    <div class="masonry">
-      <figure class="quote big reveal">
-        <span class="qmark" aria-hidden="true">“</span>
-        <blockquote>${esc(pick(BOOK.annotation))}</blockquote>
-        <figcaption><b>${esc(BOOK.author)}</b><span>${esc(pick(BOOK.university))}</span></figcaption>
-      </figure>
-      <a class="quote cover reveal" href="#/kitob"><img src="img/cover-sm.webp" width="400" height="566" alt="“Phraseo-Barrier Matrix” kitobi muqovasi" loading="lazy"></a>
-      ${BOOK.reviewers.map((r) => `<figure class="quote reveal"><figcaption><small>${t('about.reviewers')}</small><b>${esc(r.name)}</b><span>${esc(pick(r.role))}</span></figcaption></figure>`).join('')}
-      <figure class="quote reveal"><figcaption><small>${esc(pick(BOOK.city))}</small><b>${esc(pick(BOOK.program))}</b></figcaption><a class="link" href="#/kitob">${t('home.aboutMore')} ${icon('arrow-right', 14)}</a></figure>
-    </div>
-  </section>
-
   <section class="section wrap narrow">
     <h2 class="display h2 center reveal">${t('w.faqTitle')}</h2>
     <div class="faq">
@@ -255,7 +279,7 @@ function viewHome() {
     <div class="cta reveal">
       <div class="cta-text">
         <h2 class="display">${t('w.ctaTitle')}</h2>
-        <a class="btn light" href="#/darslar">${t('w.start')}</a>
+        <a class="btn light" href="#/dars/1">${t('w.startFirst')}</a>
       </div>
       <div class="cta-art">${bookIcon('cta')}</div>
     </div>
@@ -322,7 +346,6 @@ function bindHome() {
       flash.querySelector('[data-act="next"]').focus();
     }
   });
-  bindFilters('home', (f) => { document.getElementById('cards').innerHTML = cardsHtml(f, 6); });
 
   // Aylanib turuvchi sariq "chip"
   const roll = document.getElementById('roll');
@@ -335,14 +358,54 @@ function bindHome() {
     cleanup.push(() => clearInterval(id));
   }
 
-  // Kartochkalar to‘plami: scroll bilan kattalashadi
+  // Dars turlari kartochkalari darslarni filtrlaydi
+  const typeBtns = [...document.querySelectorAll('[data-type]')];
+  const segBtns = [...document.querySelectorAll('[data-filter-scope="home"] [data-filter]')];
+  const setFilter = (f) => {
+    typeBtns.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.type === f)));
+    segBtns.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.filter === f)));
+    document.getElementById('cards').innerHTML = cardsHtml(f, f === 'all' ? 6 : 0);
+  };
+  typeBtns.forEach((b) => b.addEventListener('click', () => {
+    setFilter(b.getAttribute('aria-pressed') === 'true' ? 'all' : b.dataset.type);
+    document.getElementById('cards').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+  }));
+  segBtns.forEach((b) => b.addEventListener('click', () => setFilter(b.dataset.filter)));
+
+  // 3D kitob: scroll bilan ochiladi; muqovani bosish yoki "Kitobni ochish" tugmasi ham ochadi
   const stack = document.getElementById('stack');
+  const book = document.getElementById('book');
+  let forced = null; // null — scrollga bog‘liq, 0/1 — foydalanuvchi tanlovi
+  const setOpen = (o) => {
+    book.style.setProperty('--o', o.toFixed(3));
+    book.dataset.open = String(o > 0.5);
+  };
+  const toggle = () => {
+    const now = book.dataset.open === 'true';
+    forced = now ? 0 : 1;
+    book.classList.add('animating');
+    setOpen(forced);
+    setTimeout(() => book.classList.remove('animating'), 900);
+  };
+  book.querySelector('[data-book-toggle]').addEventListener('click', (e) => { if (!e.target.closest('a')) toggle(); });
+  book.querySelector('[data-book-toggle]').addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } });
+  document.querySelector('[data-open-book]').addEventListener('click', () => {
+    stack.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
+    forced = 1; book.classList.add('animating'); setOpen(1);
+    setTimeout(() => book.classList.remove('animating'), 900);
+  });
+
   const words = [...document.querySelectorAll('#statement .w, #statement .inline-sticker')];
   onScrollFx(() => {
     const vh = window.innerHeight;
     const r = stack.getBoundingClientRect();
     const p = reduceMotion ? 1 : Math.min(1, Math.max(0, (vh * 0.75 - r.top) / (vh * 0.6)));
     stack.style.setProperty('--p', p.toFixed(3));
+    if (forced === null) {
+      // kartochka ekranga chiqqach muqova asta ochiladi
+      const o = reduceMotion ? 1 : Math.min(1, Math.max(0, (vh * 0.62 - r.top) / (vh * 0.42)));
+      setOpen(o);
+    }
     // Katta jumla: so‘zlar scroll bilan qorayadi
     const st = document.getElementById('statement');
     if (!st) return;

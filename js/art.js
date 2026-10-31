@@ -179,13 +179,14 @@ export function bookIcon(p = 'bk') {
 
 // Kichik "stiker"lar: matn ichida va statistik qatorlarda
 export function sticker(kind, p) {
-  const v = { moon: `<svg viewBox="300 140 360 360">`, heart: `<svg viewBox="-110 -100 220 200">`, ice: `<svg viewBox="-90 -90 180 180">`, cake: `<svg viewBox="-120 -120 240 240">`, beans: `<svg viewBox="-70 -100 280 260">` }[kind];
+  const v = { moon: `<svg viewBox="300 140 360 360">`, heart: `<svg viewBox="-110 -100 220 200">`, ice: `<svg viewBox="-90 -90 180 180">`, cake: `<svg viewBox="-120 -120 240 240">`, beans: `<svg viewBox="-70 -100 280 260">`, cow: `<svg viewBox="-80 -70 190 140">` }[kind];
   const body = {
     moon: moon(p, 480, 320, 160),
     heart: heart(p, 0, 0, 1, 0),
     ice: iceCube(p, 0, 0, 1, -8),
     cake: cake(p, 0, 0, 1, -10),
     beans: beanCan(p, 20, 60, 1),
+    cow: cow(0, 0, 1, -10),
   }[kind];
   return `${v.replace('<svg', '<svg class="sticker-svg" aria-hidden="true"')}<defs>${defs(p)}</defs>${body}</svg>`;
 }

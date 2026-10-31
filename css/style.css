@@ -530,3 +530,90 @@ mark.hl { background: color-mix(in srgb, var(--k) 18%, transparent); color: inhe
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
   .reveal { opacity: 1; transform: none; }
 }
+
+/* ======================================================================
+   Kitob — bosh sahifadagi asosiy element
+   ====================================================================== */
+.hero-badge { display: inline-flex; align-items: center; gap: 10px; padding: 5px 14px 5px 5px; margin-bottom: 22px; border-radius: 999px; background: var(--soft); font-size: 13.5px; font-weight: 500; }
+.hero-badge img { width: 26px; height: 36px; object-fit: cover; border-radius: 4px; box-shadow: 0 4px 10px -4px rgb(0 0 0 / .4); }
+.hero .reveal:nth-child(4) { transition-delay: .24s; }
+
+.layer.v.book-stage { aspect-ratio: auto; display: grid; place-items: center; padding: clamp(44px, 6vw, 76px) 20px clamp(64px, 7vw, 92px); perspective: 2400px; }
+.stage-hint { position: absolute; left: 0; right: 0; bottom: 22px; text-align: center; font-size: 13px; color: rgb(255 255 255 / .7); transition: opacity .3s; }
+.book[data-open="true"] ~ .stage-hint { opacity: 0; }
+
+.book { --o: 0; position: relative; z-index: 2; width: min(940px, 100%); aspect-ratio: 1.4128;
+  transform: translateX(calc(-25% * (1 - var(--o)))) rotateX(calc(10deg * (1 - var(--o)))) rotateZ(calc(-2deg * (1 - var(--o))));
+  transform-style: preserve-3d; }
+.book-page.right { position: absolute; left: 50%; top: 0; width: 50%; height: 100%; background: #fff; border-radius: 3px 16px 16px 3px; overflow: hidden;
+  box-shadow: 3px 0 0 #EEEBFA, 6px 0 0 #E1DCF6, 9px 1px 0 #D3CCF0, 0 40px 70px -30px rgb(20 6 90 / .65); }
+.book-page.right::before { content: ''; position: absolute; inset: 0 auto 0 0; width: 40px; background: linear-gradient(90deg, rgb(30 10 120 / .14), transparent); pointer-events: none; z-index: 1; }
+.book-cover { position: absolute; left: 50%; top: 0; width: 50%; height: 100%; transform-origin: left center; transform: rotateY(calc(-178deg * var(--o))); transform-style: preserve-3d; cursor: pointer; z-index: 3; }
+.book-cover:focus-visible { outline: 3px solid var(--yellow); outline-offset: 4px; }
+.book.animating { transition: transform .85s cubic-bezier(.3,.7,.2,1); }
+.book.animating .book-cover { transition: transform .85s cubic-bezier(.3,.7,.2,1); }
+.face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; overflow: hidden; }
+.face.front { border-radius: 3px 16px 16px 3px; box-shadow: 0 40px 70px -30px rgb(20 6 90 / .7); }
+.face.front img { width: 100%; height: 100%; object-fit: cover; }
+.face.front::after { content: ''; position: absolute; inset: 0 auto 0 0; width: 18px; background: linear-gradient(90deg, rgb(0 0 0 / .22), rgb(255 255 255 / .18) 40%, transparent); }
+.open-hint { position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%); display: inline-flex; align-items: center; gap: 7px; height: 38px; padding: 0 16px; border-radius: 999px; background: var(--ink); color: #fff; font-size: 13.5px; font-weight: 500; white-space: nowrap; box-shadow: 0 10px 24px -8px rgb(0 0 0 / .5); transition: opacity .3s; }
+.book[data-open="true"] .open-hint { opacity: 0; }
+.face.back { transform: rotateY(180deg); background: #fff; border-radius: 16px 3px 3px 16px; box-shadow: -3px 0 0 #EEEBFA, -6px 0 0 #E1DCF6, -9px 1px 0 #D3CCF0; }
+.face.back::after { content: ''; position: absolute; inset: 0 0 0 auto; width: 40px; background: linear-gradient(270deg, rgb(30 10 120 / .14), transparent); pointer-events: none; }
+.page-inner { position: relative; height: 100%; overflow: auto; padding: clamp(18px, 3vw, 34px) clamp(16px, 3vw, 34px); color: var(--ink); text-align: left; cursor: default; }
+.page-kicker { font-size: 12.5px; font-weight: 500; color: var(--muted); padding-bottom: 10px; margin-bottom: 10px; border-bottom: 1px solid var(--line); }
+.inner-title { font-size: clamp(24px, 3vw, 36px); font-weight: 400; letter-spacing: -.035em; line-height: 1.05; }
+.inner-sub { margin-top: 8px; font-size: 13.5px; color: var(--muted); }
+.inner-facts { margin: 18px 0; display: grid; gap: 12px; }
+.inner-facts dt { font-size: 11.5px; color: var(--muted); }
+.inner-facts dd { font-size: 14px; font-weight: 500; line-height: 1.35; }
+.toc { list-style: none; padding: 0; margin: 0; display: grid; gap: 1px; }
+.toc a { display: flex; align-items: baseline; gap: 8px; padding: 4px 6px; border-radius: 8px; font-size: clamp(11.5px, 1.25vw, 14px); transition: background .2s; }
+.toc a:hover { background: var(--soft); }
+.toc a:hover .toc-t { color: var(--k); }
+.toc-n { font-weight: 600; color: var(--k); min-width: 1.6em; }
+.toc-t { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 75%; transition: color .2s; }
+.toc-dots { flex: 1; border-bottom: 1.5px dotted #C9C9D6; transform: translateY(-3px); min-width: 12px; }
+.toc-p { color: var(--muted); }
+
+/* Kitob atrofidagi stikerlar */
+.float { position: absolute; z-index: 1; animation: floaty 7s ease-in-out infinite; pointer-events: none; }
+.float svg { width: 100%; height: 100%; overflow: visible; }
+.f1 { left: 3%; top: 7%; width: 120px; height: 120px; }
+.f2 { right: 4%; top: 9%; width: 104px; height: 96px; animation-delay: -2s; }
+.f3 { right: 3%; bottom: 10%; width: 130px; height: 130px; animation-delay: -4s; }
+.f4 { left: 5%; bottom: 12%; width: 96px; height: 96px; animation-delay: -1s; }
+.f5 { left: 42%; top: 1.5%; width: 120px; height: 90px; animation-delay: -3s; z-index: 4; }
+@keyframes floaty { 0%, 100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-10px) rotate(3deg); } }
+
+/* Dars turlari endi tugma — filtr vazifasini bajaradi */
+button.type { border: 0; background: none; padding: 0; margin: 0; font: inherit; color: inherit; text-align: left; cursor: pointer; }
+button.type[aria-pressed="true"] .type-card { box-shadow: 0 0 0 4px #fff, 0 0 0 7px var(--ink); transform: rotate(0); }
+#lessons .lede { margin-bottom: 0; }
+#lessons .types { margin-top: 40px; }
+
+/* Telefon: 3D o‘rniga ketma-ket kartochkalar */
+@media (max-width: 760px) {
+  .layer.v.book-stage { padding: 28px 14px 32px; perspective: none; }
+  .book { aspect-ratio: auto; transform: none !important; display: grid; gap: 12px; width: 100%; }
+  .book-cover, .book-page.right { position: relative; left: auto; width: 100%; height: auto; transform: none !important; }
+  .book-cover { display: grid; gap: 12px; cursor: default; }
+  .face { position: relative; inset: auto; backface-visibility: visible; -webkit-backface-visibility: visible; }
+  .face.front { width: 58%; margin: 0 auto; aspect-ratio: .7064; border-radius: 4px 12px 12px 4px; }
+  .face.back { transform: none; border-radius: 20px; box-shadow: none; }
+  .face.back::after, .book-page.right::before, .open-hint, .stage-hint { display: none; }
+  .book-page.right { border-radius: 20px; box-shadow: none; }
+  .page-inner { height: auto; overflow: visible; }
+  .toc-t { max-width: 62%; }
+  .float { display: none; }
+  .f1, .f2 { display: block; width: 64px; height: 64px; top: 10px; }
+  .f1 { left: 6px; } .f2 { right: 6px; }
+}
+@media (max-width: 760px) {
+  .book-page.right { order: 2; }
+  .layer.y, .layer.p { display: none; }
+  .type-card { aspect-ratio: 1 / .62; }
+  .type-art { width: 52%; top: 4%; right: 2%; }
+  .type-num { font-size: 64px; }
+  .hero-title { font-size: clamp(36px, 10vw, 44px); }
+}
