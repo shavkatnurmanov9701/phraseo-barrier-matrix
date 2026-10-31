@@ -14,16 +14,16 @@
 
 export const KINDS = {
   idiom:   { uz: 'Idiomalar',        en: 'Idioms' },
-  phrasal: { uz: 'Frazali feʼllar',  en: 'Phrasal verbs' },
+  phrasal: { uz: 'Frazali fe’llar',  en: 'Phrasal verbs' },
   phrase:  { uz: 'Kollokatsiya va iboralar', en: 'Collocations & phrases' },
-  vocab:   { uz: 'Soʻz va birikmalar', en: 'Vocabulary' },
+  vocab:   { uz: 'So‘z va birikmalar', en: 'Vocabulary' },
 };
 
 // Mashq turlari — keyingi bosqichda interaktiv qilinadi
 export const ACTIVITY_TYPES = {
-  gap:      { uz: 'Boʻshliqni toʻldirish', en: 'Gap-fill' },
+  gap:      { uz: 'Bo‘shliqni to‘ldirish', en: 'Gap-fill' },
   mcq:      { uz: 'Test (variantli)',      en: 'Multiple choice' },
-  tf:       { uz: 'Toʻgʻri / notoʻgʻri',   en: 'True / false' },
+  tf:       { uz: 'To‘g‘ri / noto‘g‘ri',   en: 'True / false' },
   match:    { uz: 'Moslashtirish',         en: 'Matching' },
   order:    { uz: 'Tartiblash',            en: 'Ordering' },
   rewrite:  { uz: 'Qayta yozish',          en: 'Rewriting' },
@@ -33,7 +33,7 @@ export const ACTIVITY_TYPES = {
   video:    { uz: 'Video topshiriq',       en: 'Video task' },
   crossword:{ uz: 'Krossvord',             en: 'Crossword' },
   riddle:   { uz: 'Topishmoqlar',          en: 'Riddles' },
-  roleplay: { uz: 'Rolli oʻyin',           en: 'Role play' },
+  roleplay: { uz: 'Rolli o‘yin',           en: 'Role play' },
   hunt:     { uz: 'Iborani topish',        en: 'Idiom hunt' },
 };
 
@@ -47,10 +47,10 @@ const OBJECTIVES = {
   ],
   uz: [
     'hikoyadagi idiomalarni aniqlay oladi;',
-    'keng tarqalgan ingliz idiomalarining kontekstdagi maʼnosini tushunadi;',
-    'idiomatik iboralarni ogʻzaki va yozma nutqda qoʻllaydi;',
-    'kontekstual tahlil orqali matnni tushunish koʻnikmasini oshiradi;',
-    'kundalik hayot muammolarini oʻrganilgan iboralar yordamida muhokama qiladi.',
+    'keng tarqalgan ingliz idiomalarining kontekstdagi ma’nosini tushunadi;',
+    'idiomatik iboralarni og‘zaki va yozma nutqda qo‘llaydi;',
+    'kontekstual tahlil orqali matnni tushunish ko‘nikmasini oshiradi;',
+    'kundalik hayot muammolarini o‘rganilgan iboralar yordamida muhokama qiladi.',
   ],
 };
 export { OBJECTIVES };
@@ -91,7 +91,7 @@ export const LESSONS = [
     n: 2, book: 'Story 2', page: 19, kind: 'idiom',
     title: 'The Unexpected Adventure',
     about: {
-      uz: 'Emili dugonasi Sarani rejasiz sayohatga koʻndiradi — mashina esa “hech qayerning oʻrtasida” buziladi.',
+      uz: 'Emili dugonasi Sarani rejasiz sayohatga ko‘ndiradi — mashina esa “hech qayerning o‘rtasida” buziladi.',
       en: 'Emily talks Sarah into an unplanned road trip — and the car breaks down in the middle of nowhere.',
     },
     poster: 'img/posters/02.webp',
@@ -127,7 +127,7 @@ export const LESSONS = [
     n: 3, book: 'Story 3', page: 26, kind: 'phrase',
     title: 'Money or Family',
     about: {
-      uz: 'Oilaning yagona boquvchisi Rama kuniga 16 soatdan ortiq ishlaydi — pul koʻpayadi, oilaga vaqt esa qolmaydi.',
+      uz: 'Oilaning yagona boquvchisi Rama kuniga 16 soatdan ortiq ishlaydi — pul ko‘payadi, oilaga vaqt esa qolmaydi.',
       en: 'Rama, the sole breadwinner, works over sixteen hours a day — the money grows, the family time disappears.',
     },
     poster: 'img/posters/03.webp',
@@ -163,7 +163,7 @@ export const LESSONS = [
     n: 4, book: 'Story 4', page: 34, kind: 'phrase',
     title: 'Teamwork',
     about: {
-      uz: 'Doim janjallashadigan uch oʻgʻilga ota bir bogʻlam choʻp bilan birlik kuchini koʻrsatadi.',
+      uz: 'Doim janjallashadigan uch o‘g‘ilga ota bir bog‘lam cho‘p bilan birlik kuchini ko‘rsatadi.',
       en: 'A father shows his three quarrelling sons the strength of unity with a bundle of sticks.',
     },
     poster: 'img/posters/04.webp',
@@ -204,7 +204,7 @@ export const LESSONS = [
     n: 5, book: 'Story 5', page: 40, kind: 'phrase',
     title: 'First Star I See Tonight',
     about: {
-      uz: 'Olim Tomas Streyerning tajribasidan soʻng osmondagi yulduzlar gʻoyib boʻladi va dunyo uni “yulduzlarni oʻgʻirlash”da ayblaydi.',
+      uz: 'Olim Tomas Streyerning tajribasidan so‘ng osmondagi yulduzlar g‘oyib bo‘ladi va dunyo uni “yulduzlarni o‘g‘irlash”da ayblaydi.',
       en: 'After Dr Tomas Streyer’s experiment the stars vanish, and the world puts him on trial for stealing them.',
     },
     poster: null,
@@ -274,7 +274,7 @@ export const LESSONS = [
     n: 6, book: 'Story 6', page: 49, kind: 'idiom',
     title: 'The Little Bakery',
     about: {
-      uz: 'Novvoy Klara ishdan holdan toyadi. Dugonasi Lyusi unga toʻxtab, hayotdan zavq olishni eslatadi.',
+      uz: 'Novvoy Klara ishdan holdan toyadi. Dugonasi Lyusi unga to‘xtab, hayotdan zavq olishni eslatadi.',
       en: 'Baker Clara is running on empty until her friend Lucy reminds her to stop and smell the roses.',
     },
     poster: 'img/posters/06.webp',
@@ -303,7 +303,7 @@ export const LESSONS = [
     n: 7, book: 'Lesson 7', page: 55, kind: 'idiom',
     title: 'Lucy’s Journey to Self-Discovery',
     about: {
-      uz: 'Uyatchan Lyusi yozgi lagerga borib, oʻz “qobigʻi”dan chiqadi va yozuvchilik isteʼdodini kashf etadi.',
+      uz: 'Uyatchan Lyusi yozgi lagerga borib, o‘z “qobig‘i”dan chiqadi va yozuvchilik iste’dodini kashf etadi.',
       en: 'Shy Lucy goes to summer camp, breaks out of her shell and discovers a talent for writing.',
     },
     poster: null,
@@ -351,7 +351,7 @@ export const LESSONS = [
     n: 8, book: 'Story 8', page: 63, kind: 'phrase',
     title: 'The Mysterious Letter',
     about: {
-      uz: 'Emili qizil mum muhr bilan yopilgan sirli xat oladi va qiziqishi qoʻrquvidan ustun keladi.',
+      uz: 'Emili qizil mum muhr bilan yopilgan sirli xat oladi va qiziqishi qo‘rquvidan ustun keladi.',
       en: 'Emily receives a letter sealed with red wax — and her curiosity gets the better of her.',
     },
     poster: 'img/posters/08.webp',
@@ -391,7 +391,7 @@ export const LESSONS = [
     n: 9, book: 'Story 9', page: 70, kind: 'idiom',
     title: 'Jack and the Art of Perseverance',
     about: {
-      uz: 'Rassom Jek muvaffaqiyatsizlikdan qoʻrqadi, lekin doʻsti Miya uni rasm tanloviga qatnashishga undaydi.',
+      uz: 'Rassom Jek muvaffaqiyatsizlikdan qo‘rqadi, lekin do‘sti Miya uni rasm tanloviga qatnashishga undaydi.',
       en: 'Young painter Jack fears failure, but his friend Mia pushes him to enter an art competition.',
     },
     poster: 'img/posters/09.webp',
@@ -421,7 +421,7 @@ export const LESSONS = [
     n: 10, book: 'Story 10', page: 77, kind: 'idiom',
     title: 'The Unexpected Visitor',
     about: {
-      uz: 'Ishdan charchagan Paul eski doʻsti Markka murojaat qiladi — Mark esa unga suyanchiq boʻladi.',
+      uz: 'Ishdan charchagan Paul eski do‘sti Markka murojaat qiladi — Mark esa unga suyanchiq bo‘ladi.',
       en: 'Overworked Paul turns to his old friend Mark, who becomes his rock.',
     },
     poster: 'img/posters/10.webp',
@@ -449,7 +449,7 @@ export const LESSONS = [
     n: 11, book: 'Story 11', page: 84, kind: 'phrasal',
     title: 'The Unexpected Journey',
     about: {
-      uz: 'Qoʻrquvi doim toʻsiq boʻlgan Emma dugonasi Sara bilan Gretsiyaga sayohatga chiqadi.',
+      uz: 'Qo‘rquvi doim to‘siq bo‘lgan Emma dugonasi Sara bilan Gretsiyaga sayohatga chiqadi.',
       en: 'Emma, always held back by fear, sets off for Greece with her friend Sarah.',
     },
     poster: 'img/posters/11.webp',
@@ -520,7 +520,7 @@ export const LESSONS = [
     n: 13, book: 'Story 13', page: 99, kind: 'phrasal',
     title: 'The Missed Opportunity',
     about: {
-      uz: 'Fotograf boʻlishni orzu qilgan Sofi qoʻrquv tufayli tanlovga ishini topshirishni paysalga soladi.',
+      uz: 'Fotograf bo‘lishni orzu qilgan Sofi qo‘rquv tufayli tanlovga ishini topshirishni paysalga soladi.',
       en: 'Aspiring photographer Sophie keeps putting off her contest entry — and misses the deadline.',
     },
     poster: 'img/posters/13.webp',
@@ -554,7 +554,7 @@ export const LESSONS = [
     n: 14, book: 'Story 14', page: 106, kind: 'phrasal',
     title: 'The Forgotten Appointment',
     about: {
-      uz: 'Doʻsti bilan qahva ichib, vaqtni unutgan Jeyk boshligʻi bilan muhim uchrashuvni oʻtkazib yuboradi.',
+      uz: 'Do‘sti bilan qahva ichib, vaqtni unutgan Jeyk boshlig‘i bilan muhim uchrashuvni o‘tkazib yuboradi.',
       en: 'Catching up with a friend over coffee, Jake loses track of time and misses a key meeting.',
     },
     poster: 'img/posters/14.webp',
@@ -633,7 +633,7 @@ export const LESSONS = [
     n: 16, book: 'Story 17', page: 122, kind: 'idiom',
     title: 'The Case of the Counterfeit Canary',
     about: {
-      uz: 'Ledi Plamtrining qimmatbaho “Oltin qushcha”si oʻgʻirlanadi. Professor Finch ishning tagiga yetishga kirishadi.',
+      uz: 'Ledi Plamtrining qimmatbaho “Oltin qushcha”si o‘g‘irlanadi. Professor Finch ishning tagiga yetishga kirishadi.',
       en: 'Lady Plumtree’s priceless Golden Songbird is stolen, and Professor Finch sets out to get to the bottom of it.',
     },
     poster: 'img/posters/16.webp',
@@ -666,7 +666,7 @@ export const LESSONS = [
     n: 17, book: 'Story 18', page: 130, kind: 'idiom',
     title: 'The Curious Inheritance of Barnaby Buttonwood',
     about: {
-      uz: 'Oddiy kotib Barnabi ixtirochi amakisidan jumboqlarga toʻla qasrni meros qilib oladi.',
+      uz: 'Oddiy kotib Barnabi ixtirochi amakisidan jumboqlarga to‘la qasrni meros qilib oladi.',
       en: 'Ordinary clerk Barnaby inherits his inventor great-uncle’s mansion — full of riddles and secrets.',
     },
     poster: 'img/posters/17.webp',
@@ -701,7 +701,7 @@ export const LESSONS = [
     n: 18, book: 'Story 19', page: 137, kind: 'idiom',
     title: 'The Peculiar Predicaments of Penelope Plum’s Portraits',
     about: {
-      uz: 'Sanʼatshunos Penelopa va detektiv Finch vaqt oʻtishi bilan oʻzgarib boradigan sirli portretlarni tekshiradi.',
+      uz: 'San’atshunos Penelopa va detektiv Finch vaqt o‘tishi bilan o‘zgarib boradigan sirli portretlarni tekshiradi.',
       en: 'Art critic Penelope and Detective Finch investigate portraits that seem to change over time.',
     },
     poster: 'img/posters/18.webp',

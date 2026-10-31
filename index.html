@@ -2,62 +2,68 @@
 <html lang="uz">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Phraseo-Barrier Matrix — ingliz idiomalari</title>
-  <meta name="description" content="“Phraseo-Barrier Matrix” oʻquv qoʻllanmasining elektron hamrohi: 19 ta hikoya, ingliz idiomalari, frazali feʼllar va lugʻat. Muallif: S.M. Jumayeva, OʻzDJTU.">
-  <meta name="theme-color" content="#1D2353">
+  <meta name="description" content="“Phraseo-Barrier Matrix” o‘quv qo‘llanmasining elektron hamrohi: 19 ta hikoya, ingliz idiomalari, frazali fe’llar va lug‘at. Muallif: S.M. Jumayeva, O‘zDJTU.">
+  <meta name="theme-color" content="#0F1B4D">
   <meta property="og:title" content="Phraseo-Barrier Matrix">
-  <meta property="og:description" content="Ingliz idiomalarini hikoyalar orqali oʻrganing: 19 ta dars, lugʻat va mashqlar.">
+  <meta property="og:description" content="Ingliz idiomalarini hikoyalar orqali o‘rganing: 19 ta dars, lug‘at va mashqlar.">
   <meta property="og:image" content="img/cover.webp">
   <link rel="icon" href="img/favicon.svg" type="image/svg+xml">
-  <link rel="preload" href="fonts/archivo-latin-wdth-normal.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="fonts/literata-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/figtree-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/bricolage-grotesque-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/fonts.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <a class="skip" href="#main">Asosiy qismga oʻtish</a>
+  <a class="skip" href="#main" data-i18n="skip">Asosiy qismga o‘tish</a>
 
   <header class="site-header">
     <div class="wrap header-row">
-      <a class="brand" href="#/" aria-label="Phraseo-Barrier Matrix — bosh sahifa">
-        <span class="brand-mark" aria-hidden="true">
-          <i></i><i></i><i></i><i></i>
-        </span>
-        <span class="brand-name">Phraseo-Barrier<br>Matrix</span>
+      <a class="brand" href="#/" aria-label="Phraseo-Barrier Matrix">
+        <img class="brand-mark" src="img/favicon.svg" width="36" height="36" alt="">
+        <span class="brand-name"><span>Phraseo-Barrier</span><b>Matrix</b></span>
       </a>
 
-      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav" data-i18n="nav.menu">Menyu</button>
-
-      <nav id="site-nav" class="site-nav" aria-label="Asosiy menyu">
+      <nav class="pill-nav" aria-label="Asosiy menyu">
+        <a href="#/" data-route="home" data-i18n="nav.home">Bosh sahifa</a>
         <a href="#/darslar" data-route="darslar" data-i18n="nav.lessons">Darslar</a>
-        <a href="#/lugat" data-route="lugat" data-i18n="nav.glossary">Lugʻat</a>
+        <a href="#/lugat" data-route="lugat" data-i18n="nav.glossary">Lug‘at</a>
         <a href="#/kitob" data-route="kitob" data-i18n="nav.about">Kitob haqida</a>
+      </nav>
+
+      <div class="header-tools">
         <div class="lang" role="group" data-i18n-label="lang.switch" aria-label="Tilni almashtirish">
+          <span class="lang-ic" data-icon="globe"></span>
           <button type="button" data-lang="uz" aria-pressed="true">UZ</button>
           <button type="button" data-lang="en" aria-pressed="false">EN</button>
         </div>
-      </nav>
+        <button class="menu-btn" type="button" aria-expanded="false" aria-controls="mobile-nav" data-i18n-label="nav.menu" aria-label="Menyu"><span data-icon="menu"></span></button>
+      </div>
     </div>
+    <nav id="mobile-nav" class="mobile-nav" aria-label="Mobil menyu" hidden>
+      <a href="#/" data-route="home" data-i18n="nav.home">Bosh sahifa</a>
+      <a href="#/darslar" data-route="darslar" data-i18n="nav.lessons">Darslar</a>
+      <a href="#/lugat" data-route="lugat" data-i18n="nav.glossary">Lug‘at</a>
+      <a href="#/kitob" data-route="kitob" data-i18n="nav.about">Kitob haqida</a>
+    </nav>
   </header>
 
-  <main id="main" tabindex="-1"></main>
+  <main id="main" class="wrap" tabindex="-1"></main>
 
   <footer class="site-footer">
     <div class="wrap footer-row">
-      <div>
-        <p class="footer-title">Phraseo-Barrier Matrix</p>
-        <p data-i18n="footer.made">Oʻquv qoʻllanmaning elektron hamrohi</p>
-      </div>
-      <div class="footer-meta">
-        <p>Jumayeva S.M.</p>
-        <p data-footer="university"></p>
-      </div>
+      <a class="brand" href="#/" aria-label="Phraseo-Barrier Matrix">
+        <img class="brand-mark big" src="img/favicon.svg" width="44" height="44" alt="">
+        <span class="brand-name"><span>Phraseo-Barrier</span><b>Matrix</b></span>
+      </a>
+      <p class="footer-note"><span data-i18n="footer.made">O‘quv qo‘llanmaning elektron hamrohi</span><br><span data-footer="university"></span></p>
+      <p class="footer-meta">Jumayeva S.M. · 2026</p>
     </div>
   </footer>
 
   <dialog class="viewer" id="viewer">
-    <form method="dialog"><button class="viewer-close" type="submit" data-i18n="lesson.close">Yopish</button></form>
+    <form method="dialog"><button class="btn primary sm" type="submit" data-i18n="lesson.close">Yopish</button></form>
     <img alt="">
   </dialog>
 
