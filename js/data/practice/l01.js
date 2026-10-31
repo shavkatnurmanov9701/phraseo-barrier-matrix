@@ -1,6 +1,7 @@
 // 1-dars: A Day in the Life — interaktiv mashqlar.
 // Manba: kitob, 12–18-betlar. Javob kalitlari kitobdan olingan.
 // Hikoya matni kitobdagi rasmdan ko'chirildi ("Jack fell like" → "felt like" tuzatildi).
+// Yozma ishlar (o‘z gaplari, esse) va uy vazifasi egasining qarori bilan olib tashlangan (2026-11-01).
 // [[...]] — lug'atdagi ibora; [[ko'rinish|lug'atdagi shakli]] — boshqa shaklda kelgan ibora.
 
 export default {
@@ -84,25 +85,6 @@ export default {
       ],
     },
     {
-      id: 'a4',
-      kind: 'sentences',
-      title: 'Use the Idioms in Your Own Sentences',
-      instructions: {
-        uz: 'Har bir idioma bilan o‘zingiz gap tuzing. Gapda idioma ishlatilsa, yashil belgi chiqadi. Qiynalsangiz, namunani ko‘ring.',
-        en: 'Write your own sentence with each idiom. A green tick appears when the idiom is used. Stuck? Look at the example.',
-      },
-      items: [
-        ['Hit the road', 'We should hit the road before the traffic gets worse.'],
-        ['Bite the bullet', 'I hate going to the dentist, but I bit the bullet and booked an appointment.'],
-        ['Over the moon', 'My sister was over the moon when she passed her driving test.'],
-        ['Keep my head down', 'During my first week at the new job, I tried to keep my head down and learn.'],
-        ['Burn the candle at both ends', 'Before the exams, many students burn the candle at both ends.'],
-        ['Bury the hatchet', 'After years of arguing, the two neighbours decided to bury the hatchet.'],
-        ['Rolling with the punches', 'Moving to a new city was hard, but she kept rolling with the punches.'],
-        ['All’s well that ends well', 'We missed the bus but caught a taxi just in time — all’s well that ends well.'],
-      ],
-    },
-    {
       id: 'a5',
       kind: 'hunt',
       title: 'Identify the Idiom',
@@ -117,51 +99,6 @@ export default {
         ['Jack’s boss was upset, and Jack realized it was best to keep his head down and avoid further conflict.', 'keep his head down', 'to avoid attracting attention or trouble'],
         ['By the end of the day, everything fell into place, and Jack thought to himself, All’s well that ends well.', 'All’s well that ends well', 'everything is fine in the end, even if there were problems'],
       ],
-    },
-    {
-      id: 'a6',
-      kind: 'essay',
-      title: 'Discussion Prompt',
-      instructions: {
-        uz: 'Savolga 150–200 so‘zli javob yozing. Darsdagi idiomalardan foydalaning: ular avtomatik aniqlanadi.',
-        en: 'Write a short response (150–200 words). Use idioms from the lesson: they are detected automatically.',
-      },
-      image: 'img/practice/l01-discussion.webp',
-      prompt: 'In your opinion, why is it important to “roll with the punches” in life, as Jack did?',
-      min: 150, max: 200, idioms: 2,
-    },
-  ],
-
-  homework: [
-    {
-      id: 'h1',
-      kind: 'sentences',
-      title: 'Task 1: Write Sentences',
-      instructions: { uz: 'Quyidagi idiomalar bilan 5 ta o‘z gapingizni yozing.', en: 'Write 5 original sentences using these idioms.' },
-      items: [['Hit the road'], ['Over the moon'], ['Keep my head down'], ['Burn the candle at both ends'], ['Rolling with the punches']],
-    },
-    {
-      id: 'h2',
-      kind: 'essay',
-      title: 'Task 2: Short Paragraph',
-      instructions: {
-        uz: 'Hayotingizdagi og‘ir yoki band kun haqida 80–100 so‘zli paragraf yozing. Darsdagi kamida 3 ta idiomadan foydalaning.',
-        en: 'Write a short paragraph (80–100 words) about a stressful or busy day in your life. Use at least 3 idioms from the lesson.',
-      },
-      prompt: 'A stressful or busy day in my life',
-      min: 80, max: 100, idioms: 3,
-    },
-    {
-      id: 'h3',
-      kind: 'essay',
-      title: 'Task 3: Creative Thinking',
-      instructions: {
-        uz: 'Hikoyadagi bitta idiomani tanlang va uni ishlatish mumkin bo‘lgan hayotiy vaziyatni tasvirlang. Rasm chizsangiz, uni o‘qituvchingizga ko‘rsating.',
-        en: 'Choose one idiom from the story and explain a real-life situation where you can use it. If you draw a picture, show it to your teacher.',
-      },
-      image: 'img/practice/l01-creative.webp',
-      prompt: 'Idiom: … — Meaning: … — Real-life situation: …',
-      min: 30, max: 120, idioms: 1,
     },
   ],
 };

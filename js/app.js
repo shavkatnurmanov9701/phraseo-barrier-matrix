@@ -14,7 +14,9 @@ const ENTRIES = allEntries();
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const lessonUrl = (n) => `#/dars/${n}`;
 const kindLabel = (k) => pick(KINDS[k]);
-const TOTAL_ACTS = LESSONS.reduce((n, l) => n + l.activities.length, 0);
+// Interaktiv darslarda mashqlar soni amaldagi mashqlardan olinadi
+const actCount = (l) => (PRACTICE[l.n] ? PRACTICE[l.n].exercises.length : l.activities.length);
+const TOTAL_ACTS = LESSONS.reduce((n, l) => n + actCount(l), 0);
 
 // Har bir dars mavzusiga mos ikonka
 const LESSON_ICONS = {
@@ -111,7 +113,7 @@ function lessonCard(l) {
     <p class="desc">${esc(pick(l.about))}</p>
     <div class="meta">
       <span>${icon('layers', 14)} ${t('lessons.count', l.glossary.length)}</span>
-      <span>${icon('list-checks', 14)} ${t('lessons.acts', l.activities.length)}</span>
+      <span>${icon('list-checks', 14)} ${t('lessons.acts', actCount(l))}</span>
     </div>
     ${cardProgress(l.n)}
     <span class="lcard-cta"><span>${t('lessons.open')}</span>${icon('arrow-right', 16)}</span>
@@ -345,7 +347,7 @@ function viewLesson(n) {
         <p class="sub">${esc(pick(l.about))}</p>
         <div class="meta">
           <span>${icon('layers', 15)} ${t('lessons.count', l.glossary.length)}</span>
-          <span>${icon('list-checks', 15)} ${t('lessons.acts', l.activities.length)}</span>
+          <span>${icon('list-checks', 15)} ${t('lessons.acts', actCount(l))}</span>
           ${vid ? `<span>${icon('video', 15)} Video</span>` : ''}
           <span>${icon('book-open', 15)} ${t('lesson.inBook', l.book, l.page)}</span>
         </div>
@@ -378,9 +380,7 @@ function viewLesson(n) {
         <a class="link" href="${esc(l.video)}" target="_blank" rel="noopener">${t('lesson.videoOpen')} ${icon('arrow-right', 14)}</a>`
         : `<p class="note" style="margin:0">${t('lesson.noVideo')}</p>`, '#DB2777')}
 
-      ${pr?.homework ? `<div class="practice-head"><span class="tile sm soft" style="--k:#7C3AED">${icon('pen-line', 20)}</span><h2 class="h3">${t('lesson.homework')}</h2></div>
-        ${pr.homework.map((ex) => renderExercise(ex, null, l.n)).join('')}`
-      : block('pen-line', t('lesson.homework'), `<ul class="hw" lang="en">${l.homework.map((h) => `<li><span class="ic-wrap">${icon('pen-line', 15)}</span><span>${esc(h)}</span></li>`).join('')}</ul>`, '#7C3AED')}
+      ${pr ? '' : block('pen-line', t('lesson.homework'), `<ul class="hw" lang="en">${l.homework.map((h) => `<li><span class="ic-wrap">${icon('pen-line', 15)}</span><span>${esc(h)}</span></li>`).join('')}</ul>`, '#7C3AED')}
     </div>
 
     <aside class="card aside">

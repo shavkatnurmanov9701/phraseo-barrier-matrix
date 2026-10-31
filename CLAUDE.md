@@ -26,6 +26,8 @@ Every push to `main` goes live in 1–2 minutes, so test locally first (`python3
 - Stories are shown as the **book page image** (owner's choice, 2026-11-01). `story` text in practice files is kept
   only as data (markup `[[shown|Glossary term]]`), it is displayed only for lessons without a poster.
 - Progress: localStorage `pbm-progress` (per lesson), drafts `pbm-w-<lesson>-<id>`.
+- Owner's template (2026-11-01): warm-up + auto-checked exercises only. **No writing tasks (own sentences, essays)
+  and no homework** on interactive lessons. The engine still supports `sentences`/`essay` if asked later.
 - No audio / karaoke for stories (owner decided 2026-11-01). Don't build it unless asked.
 
 ## Domain
