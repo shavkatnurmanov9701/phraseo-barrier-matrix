@@ -127,6 +127,7 @@ const STRINGS = {
     'w.open': 'Ochish',
 
     'w.contents': 'Mundarija',
+    'w.cover': 'Muqova',
     'w.openBook': 'Kitobni ochish',
     'w.studyGuide': 'O‘quv qo‘llanma',
     'w.edition': 'Nashr',
@@ -297,6 +298,7 @@ const STRINGS = {
     'w.open': 'Open',
 
     'w.contents': 'Contents',
+    'w.cover': 'Cover',
     'w.openBook': 'Open the book',
     'w.studyGuide': 'Study guide',
     'w.edition': 'Published',

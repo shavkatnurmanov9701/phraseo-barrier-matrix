@@ -592,28 +592,54 @@ button.type[aria-pressed="true"] .type-card { box-shadow: 0 0 0 4px #fff, 0 0 0 
 #lessons .lede { margin-bottom: 0; }
 #lessons .types { margin-top: 40px; }
 
-/* Telefon: 3D o‘rniga ketma-ket kartochkalar */
 @media (max-width: 760px) {
-  .layer.v.book-stage { padding: 28px 14px 32px; perspective: none; }
-  .book { aspect-ratio: auto; transform: none !important; display: grid; gap: 12px; width: 100%; }
-  .book-cover, .book-page.right { position: relative; left: auto; width: 100%; height: auto; transform: none !important; }
-  .book-cover { display: grid; gap: 12px; cursor: default; }
-  .face { position: relative; inset: auto; backface-visibility: visible; -webkit-backface-visibility: visible; }
-  .face.front { width: 58%; margin: 0 auto; aspect-ratio: .7064; border-radius: 4px 12px 12px 4px; }
-  .face.back { transform: none; border-radius: 20px; box-shadow: none; }
-  .face.back::after, .book-page.right::before, .open-hint, .stage-hint { display: none; }
-  .book-page.right { border-radius: 20px; box-shadow: none; }
-  .page-inner { height: auto; overflow: visible; }
-  .toc-t { max-width: 62%; }
-  .float { display: none; }
-  .f1, .f2 { display: block; width: 64px; height: 64px; top: 10px; }
-  .f1 { left: 6px; } .f2 { right: 6px; }
-}
-@media (max-width: 760px) {
-  .book-page.right { order: 2; }
   .layer.y, .layer.p { display: none; }
   .type-card { aspect-ratio: 1 / .62; }
   .type-art { width: 52%; top: 4%; right: 2%; }
   .type-num { font-size: 64px; }
   .hero-title { font-size: clamp(36px, 10vw, 44px); }
+}
+
+/* Faqat telefonda ko‘rinadigan qismlar */
+.info-leaf, .book-nav { display: none; }
+
+/* Telefon: bitta sahifali 3D kitob — muqova va varaqlar chapga varaqlanadi */
+@media (max-width: 760px) {
+  .layer.v.book-stage { padding: 34px 14px 26px; perspective: 1400px; }
+  .book { width: min(290px, 76vw); aspect-ratio: .6; margin: 0 auto;
+    transform: rotateY(calc(-22deg * (1 - var(--o)))) rotateX(calc(8deg * (1 - var(--o)))); }
+  .book-page.right, .info-leaf, .book-cover { left: 0; width: 100%; }
+  .book-page.right { border-radius: 3px 14px 14px 3px; }
+  .info-leaf { display: block; position: absolute; top: 0; height: 100%; z-index: 2; background: #fff; border-radius: 3px 14px 14px 3px;
+    transform-origin: left center; transform: rotateY(0); backface-visibility: hidden; -webkit-backface-visibility: hidden; cursor: pointer;
+    box-shadow: 3px 0 0 #EEEBFA, 6px 0 0 #E1DCF6, 0 30px 50px -24px rgb(20 6 90 / .6); }
+  .book.animating .info-leaf { transition: transform .85s cubic-bezier(.3,.7,.2,1); }
+  .book[data-leaf="2"] .info-leaf { transform: rotateY(-178deg); }
+  .info-leaf::before { content: ''; position: absolute; inset: 0 auto 0 0; width: 26px; background: linear-gradient(90deg, rgb(30 10 120 / .12), transparent); pointer-events: none; }
+  .book-cover { transform: rotateY(calc(-178deg * var(--o))); }
+  .face.back { display: none; }
+  .face.front { border-radius: 3px 14px 14px 3px; }
+  .open-hint { bottom: 12px; height: 34px; font-size: 12.5px; }
+  .page-inner { padding: 18px 16px; }
+  .inner-title { font-size: 24px; }
+  .inner-facts { margin: 12px 0; gap: 8px; }
+  .inner-facts dd { font-size: 12.5px; }
+  .inner-sub { font-size: 12px; }
+  .turn-hint { position: absolute; right: 14px; bottom: 12px; display: inline-flex; align-items: center; gap: 4px; padding: 6px 12px; border-radius: 999px; background: var(--violet); color: #fff; font-size: 12px; font-weight: 500; }
+  .toc { gap: 0; }
+  .toc a { padding: 2px 2px; font-size: 11.5px; line-height: 1.45; gap: 6px; }
+  .book-page.right .page-inner { padding: 14px 14px; }
+  .toc-t { max-width: 66%; }
+  .page-kicker { padding-bottom: 6px; margin-bottom: 6px; font-size: 11.5px; }
+  .book-nav { display: inline-flex; position: relative; z-index: 5; margin-top: 26px; gap: 2px; padding: 4px; border-radius: 999px; background: rgb(255 255 255 / .16); }
+  .book-nav button { border: 0; background: transparent; color: rgb(255 255 255 / .85); height: 32px; padding: 0 12px; border-radius: 999px; font-size: 13px; font-weight: 500; cursor: pointer; }
+  .book-nav button[aria-pressed="true"] { background: #fff; color: var(--ink); }
+  .stage-hint { display: none; }
+  .float { display: block; }
+  .f1 { left: 4px; top: 8px; width: 62px; height: 62px; }
+  .f2 { right: 6px; top: 14px; width: 54px; height: 50px; }
+  .f3 { right: 2px; bottom: 70px; width: 66px; height: 66px; }
+  .f4 { left: 4px; bottom: 74px; width: 50px; height: 50px; }
+  .f5 { display: none; }
+  .book-stage { display: flex !important; flex-direction: column; align-items: center; }
 }

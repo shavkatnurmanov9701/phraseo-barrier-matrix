@@ -131,11 +131,26 @@ function bookHtml() {
   const toc = LESSONS.map((l) => `<li data-kind="${l.kind}"><a href="${lessonUrl(l.n)}">
       <span class="toc-n tnum">${pad2(l.n)}</span><span class="toc-t" lang="en">${esc(l.title)}</span><span class="toc-dots" aria-hidden="true"></span><span class="toc-p tnum">${l.page}</span>
     </a></li>`).join('');
-  return `<div class="book" id="book" data-open="false">
+  return `<div class="book" id="book" data-open="false" data-leaf="0">
     <div class="book-page right">
       <div class="page-inner">
         <p class="page-kicker">${t('w.contents')}</p>
         <ol class="toc">${toc}</ol>
+      </div>
+    </div>
+    <div class="book-leaf info-leaf" data-leaf-turn>
+      <div class="page-inner">
+          <p class="page-kicker">${t('w.studyGuide')}</p>
+          <h3 class="inner-title">Phraseo-Barrier Matrix</h3>
+          <p class="inner-sub" lang="en">${esc(BOOK.subtitle)}</p>
+          <dl class="inner-facts">
+            <div><dt>${t('about.author')}</dt><dd>${esc(BOOK.author)}</dd></div>
+            <div><dt>${t('about.reviewers')}</dt><dd>${BOOK.reviewers.map((r) => esc(r.name)).join('<br>')}</dd></div>
+            <div><dt>OTM</dt><dd>${esc(pick(BOOK.university))}</dd></div>
+            <div><dt>${t('w.edition')}</dt><dd>${esc(pick(BOOK.city))}</dd></div>
+          </dl>
+          <a class="link" href="#/kitob">${t('w.aboutBook')} ${icon('arrow-right', 14)}</a>
+        <span class="turn-hint">${t('w.contents')} ${icon('arrow-right', 14)}</span>
       </div>
     </div>
     <div class="book-cover" role="button" tabindex="0" aria-controls="book" aria-label="${esc(t('w.openBook'))}" data-book-toggle>
@@ -200,6 +215,11 @@ function viewHome() {
         <span class="float f4" aria-hidden="true">${sticker('ice', 'fi')}</span>
         <span class="float f5" aria-hidden="true">${sticker('cow', 'fw')}</span>
         ${bookHtml()}
+        <div class="book-nav" role="group" aria-label="${esc(t('w.openBook'))}">
+          <button type="button" data-goto="0" aria-pressed="true">${t('w.cover')}</button>
+          <button type="button" data-goto="1" aria-pressed="false">${t('nav.about')}</button>
+          <button type="button" data-goto="2" aria-pressed="false">${t('w.contents')}</button>
+        </div>
         <p class="stage-hint" aria-hidden="true">${t('w.scrollHint')}</p>
       </div>
     </div>
@@ -376,10 +396,28 @@ function bindHome() {
   const stack = document.getElementById('stack');
   const book = document.getElementById('book');
   let forced = null; // null — scrollga bog‘liq, 0/1 — foydalanuvchi tanlovi
+  const navBtns = [...document.querySelectorAll('[data-goto]')];
+  const syncNav = () => {
+    const step = book.dataset.open !== 'true' ? 0 : book.dataset.leaf === '2' ? 2 : 1;
+    navBtns.forEach((b) => b.setAttribute('aria-pressed', String(Number(b.dataset.goto) === step)));
+  };
   const setOpen = (o) => {
     book.style.setProperty('--o', o.toFixed(3));
     book.dataset.open = String(o > 0.5);
+    if (o <= 0.5) book.dataset.leaf = '0';
+    syncNav();
   };
+  const animate = () => { book.classList.add('animating'); clearTimeout(animate.t); animate.t = setTimeout(() => book.classList.remove('animating'), 900); };
+  // Telefonda: 0 — muqova, 1 — kitob haqida, 2 — mundarija (sahifalar varaqlanadi)
+  const goTo = (step) => {
+    animate();
+    forced = step === 0 ? 0 : 1;
+    setOpen(forced);
+    book.dataset.leaf = step === 2 ? '2' : '0';
+    syncNav();
+  };
+  navBtns.forEach((b) => b.addEventListener('click', () => goTo(Number(b.dataset.goto))));
+  book.querySelector('[data-leaf-turn]').addEventListener('click', (e) => { if (!e.target.closest('a')) goTo(2); });
   const toggle = () => {
     const now = book.dataset.open === 'true';
     forced = now ? 0 : 1;
@@ -403,7 +441,10 @@ function bindHome() {
     stack.style.setProperty('--p', p.toFixed(3));
     if (forced === null) {
       // kartochka ekranga chiqqach muqova asta ochiladi
-      const o = reduceMotion ? 1 : Math.min(1, Math.max(0, (vh * 0.62 - r.top) / (vh * 0.42)));
+      const narrow = window.innerWidth <= 760;
+      const o = reduceMotion ? 1 : narrow
+        ? Math.min(1, Math.max(0, (vh * 0.42 - r.top) / (vh * 0.3)))
+        : Math.min(1, Math.max(0, (vh * 0.62 - r.top) / (vh * 0.42)));
       setOpen(o);
     }
     // Katta jumla: so‘zlar scroll bilan qorayadi
