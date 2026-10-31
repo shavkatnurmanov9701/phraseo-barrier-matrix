@@ -12,6 +12,8 @@ index.html            — sayt qobig‘i (header, footer)
 css/style.css         — dizayn (EnNote dizayn tizimi asosida)
 css/fonts.css         — shriftlar (Bricolage Grotesque, Figtree, JetBrains Mono — o‘z serverimizda)
 js/icons.js           — Lucide ikonkalari
+js/practice.js        — interaktiv mashqlar mexanizmi
+js/data/practice/     — darslar bo‘yicha mashqlar (l01.js …)
 js/app.js             — sahifalar va marshrutlash
 js/i18n.js            — interfeys matnlari (o‘zbekcha / inglizcha)
 js/data/lessons.js    — 19 ta dars: lug‘at, mashqlar, video, uy vazifasi
@@ -47,7 +49,7 @@ python3 -m http.server 8000
 ## Bosqichlar
 
 1. ✅ Tuzilma va dizayn: bosh sahifa, darslar, dars sahifasi, lug‘at, kitob haqida
-2. ⏳ Namunaviy dars: interaktiv mashqlar (avtomatik tekshirish)
+2. ✅ 1-dars: interaktiv mashqlar (avtomatik tekshirish, yozma ishlar, natijalar saqlanadi)
 3. ⏳ Qolgan 18 dars, hikoya matnlari
 4. ⏳ Lug‘atga o‘zbekcha muqobillar, flashcard va testlar
 5. ⏳ (ixtiyoriy) Talaba progressi va o‘qituvchi paneli

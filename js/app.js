@@ -4,6 +4,8 @@ import { LESSONS, KINDS, ACTIVITY_TYPES, OBJECTIVES, allEntries } from './data/l
 import { BOOK, HERO_IDIOMS, LESSON_FLOW } from './data/book.js';
 import { t, pick, getLang, setLang } from './i18n.js';
 import { icon } from './icons.js';
+import { PRACTICE } from './data/practice/index.js';
+import { renderExercise, bindExercise, idiomMatcher, progressCount, clearLesson } from './practice.js';
 
 const main = document.getElementById('main');
 const ENTRIES = allEntries();
@@ -111,8 +113,26 @@ function lessonCard(l) {
       <span>${icon('layers', 14)} ${t('lessons.count', l.glossary.length)}</span>
       <span>${icon('list-checks', 14)} ${t('lessons.acts', l.activities.length)}</span>
     </div>
+    ${cardProgress(l.n)}
     <span class="lcard-cta"><span>${t('lessons.open')}</span>${icon('arrow-right', 16)}</span>
   </a>`;
+}
+
+function cardProgress(n) {
+  const pr = PRACTICE[n];
+  if (!pr) return '';
+  const { done, total } = progressCount(n, pr);
+  const pct = Math.round((done / total) * 100);
+  return `<div class="cprog"><div class="cprog-row"><span class="pill soon live">${icon('sparkles', 12)} ${getLang() === 'en' ? 'Interactive' : 'Interaktiv'}</span><span class="tnum">${t('lessons.progress', done, total)}</span></div><div class="bar"><span style="width:${pct}%"></span></div></div>`;
+}
+
+// [[ko'rinish|lug'atdagi shakli]] belgilarini bosiladigan iboraga aylantiradi
+function storyHtml(paras, glossary) {
+  const meaning = new Map(glossary.map(([term, m]) => [term.toLowerCase(), m]));
+  return paras.map((p) => `<p>${esc(p).replace(/\[\[([^\]|]+)(?:\|([^\]]+))?\]\]/g, (_, shown, term) => {
+    const m = meaning.get((term || shown).toLowerCase()) || '';
+    return `<button type="button" class="idi" aria-expanded="false" data-m="${esc(m)}">${shown}</button>`;
+  })}</p>`).join('');
 }
 
 function cardsHtml(filter) {
@@ -284,7 +304,12 @@ function viewLesson(n) {
   const mark = highlighter(l.glossary);
   const lang = getLang() === 'en' ? 'en' : 'uz';
 
-  const storyBlock = l.poster
+  const pr = PRACTICE[l.n];
+  const storyBlock = pr?.story
+    ? `<p class="note">${t('lesson.tapIdiom')}</p>
+       <div class="story-text" lang="en">${storyHtml(pr.story, l.glossary)}</div>
+       ${l.poster ? `<button class="btn secondary sm" type="button" data-zoom="${l.poster}" data-alt="${esc(l.title)}" style="margin-top:20px">${icon('book-open', 15)} ${t('lesson.showPoster')}</button>` : ''}`
+    : l.poster
     ? `<button class="poster" type="button" data-zoom="${l.poster}" aria-label="${esc(t('lesson.open'))}: ${esc(l.title)}">
          <img src="${l.poster}" alt="${esc(l.title)} — kitobdagi hikoya sahifasi" loading="lazy">
          <span class="enlarge">${icon('maximize-2', 15)} ${t('lesson.open')}</span>
@@ -332,9 +357,11 @@ function viewLesson(n) {
       ${block('target', t('lesson.objectives'), `<p class="note">${t('lesson.objectivesLead')}</p>
         <ul class="checks" ${lang === 'en' ? 'lang="en"' : ''}>${OBJECTIVES[lang].map((o) => `<li><span class="ok">${icon('check', 14)}</span><span>${esc(o)}</span></li>`).join('')}</ul>`, '#059669')}
 
+      ${pr?.warmup ? renderExercise(pr.warmup, null, l.n) : ''}
+
       ${block('book-open', t('lesson.story'), storyBlock, '#2563EB')}
 
-      ${block('list-checks', t('lesson.activities'), `<p class="note">${t('lesson.activitiesNote')}</p>
+      ${pr ? practiceHtml(l, pr) : block('list-checks', t('lesson.activities'), `<p class="note">${t('lesson.activitiesNote')}</p>
         <ol class="acts">${l.activities.map(([title, type]) => `<li>
           <span class="tile sm soft" style="--k:${type === 'video' ? '#DB2777' : 'var(--k-phrase)'}">${icon(ACT_ICONS[type] || 'list-checks', 18)}</span>
           <span class="txt"><b lang="en">${esc(title)}</b><small>${esc(pick(ACTIVITY_TYPES[type]))}</small></span>
@@ -350,7 +377,9 @@ function viewLesson(n) {
         <a class="link" href="${esc(l.video)}" target="_blank" rel="noopener">${t('lesson.videoOpen')} ${icon('arrow-right', 14)}</a>`
         : `<p class="note" style="margin:0">${t('lesson.noVideo')}</p>`, '#DB2777')}
 
-      ${block('pen-line', t('lesson.homework'), `<ul class="hw" lang="en">${l.homework.map((h) => `<li><span class="ic-wrap">${icon('pen-line', 15)}</span><span>${esc(h)}</span></li>`).join('')}</ul>`, '#7C3AED')}
+      ${pr?.homework ? `<div class="practice-head"><span class="tile sm soft" style="--k:#7C3AED">${icon('pen-line', 20)}</span><h2 class="h3">${t('lesson.homework')}</h2></div>
+        ${pr.homework.map((ex) => renderExercise(ex, null, l.n)).join('')}`
+      : block('pen-line', t('lesson.homework'), `<ul class="hw" lang="en">${l.homework.map((h) => `<li><span class="ic-wrap">${icon('pen-line', 15)}</span><span>${esc(h)}</span></li>`).join('')}</ul>`, '#7C3AED')}
     </div>
 
     <aside class="card aside">
@@ -370,11 +399,49 @@ function viewLesson(n) {
   </nav></div>`;
 }
 
+function practiceHtml(l, pr) {
+  const { done, total } = progressCount(l.n, pr);
+  return `<section class="card pad practice-top" id="practice">
+      <div class="block-head"><span class="tile sm soft" style="--k:#0EA5B7">${icon('list-checks', 20)}</span><h2 class="h3">${t('ex.practiceTitle')}</h2></div>
+      <p class="note">${t('ex.practiceSub')}</p>
+      <div class="lprog"><div class="lprog-row"><b data-prog-text>${t('ex.progress', done, total)}</b><button class="link-btn" type="button" data-reset>${icon('repeat', 14)} ${t('ex.resetAll')}</button></div>
+      <div class="bar big"><span data-prog-bar style="width:${Math.round((done / total) * 100)}%"></span></div></div>
+    </section>
+    ${pr.exercises.map((ex, i) => renderExercise(ex, i + 1, l.n)).join('')}`;
+}
+
 function bindLesson() {
+  const n = Number(parseHash().parts[1]);
+  const l = LESSONS.find((x) => x.n === n);
+  const pr = l && PRACTICE[n];
+  if (pr) {
+    const detect = idiomMatcher(l.glossary.map((g) => g[0]));
+    const updateProg = () => {
+      const { done, total } = progressCount(n, pr);
+      const txt = document.querySelector('[data-prog-text]');
+      if (txt) txt.textContent = t('ex.progress', done, total);
+      const bar = document.querySelector('[data-prog-bar]');
+      if (bar) bar.style.width = `${Math.round((done / total) * 100)}%`;
+    };
+    [pr.warmup, ...pr.exercises, ...(pr.homework || [])].filter(Boolean).forEach((ex) => {
+      const card = document.getElementById(`ex-${ex.id}`);
+      if (card) bindExercise(card, ex, n, detect, updateProg);
+    });
+    document.querySelector('[data-reset]')?.addEventListener('click', () => {
+      if (window.confirm(t('ex.resetConfirm'))) { clearLesson(n); render(); }
+    });
+    main.querySelectorAll('.idi').forEach((b) => b.addEventListener('click', () => {
+      const open = b.getAttribute('aria-expanded') === 'true';
+      b.setAttribute('aria-expanded', String(!open));
+      const next = b.nextElementSibling;
+      if (open && next?.classList.contains('idi-tip')) next.remove();
+      if (!open) b.insertAdjacentHTML('afterend', `<span class="idi-tip" role="note">${esc(b.dataset.m)}</span>`);
+    }));
+  }
   const gloss = document.getElementById('gloss');
   if (gloss && window.matchMedia('(max-width: 999px)').matches) gloss.open = false;
   gloss?.addEventListener('toggle', () => { if (window.matchMedia('(min-width: 1000px)').matches) gloss.open = true; });
-  main.querySelectorAll('[data-zoom]').forEach((b) => b.addEventListener('click', () => openViewer(b.dataset.zoom, b.querySelector('img').alt)));
+  main.querySelectorAll('[data-zoom]').forEach((b) => b.addEventListener('click', () => openViewer(b.dataset.zoom, b.dataset.alt || b.querySelector('img')?.alt)));
   const vb = main.querySelector('[data-video]');
   vb?.addEventListener('click', () => {
     vb.parentElement.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${vb.dataset.video}?autoplay=1&rel=0" title="YouTube video" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>`;

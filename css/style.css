@@ -466,3 +466,149 @@ mark.hl { background: color-mix(in srgb, var(--k) 14%, transparent); color: var(
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
+
+/* ======================================================================
+   Interaktiv mashqlar (EnNote mashqlari uslubida)
+   ====================================================================== */
+.practice-head { display: flex; align-items: center; gap: 12px; margin-top: 8px; }
+.practice-head .h3 { font-size: 22px; }
+.lprog { display: grid; gap: 8px; }
+.lprog-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; font-size: 15px; }
+.bar { height: 8px; border-radius: 999px; background: rgb(var(--sunk)); overflow: hidden; }
+.bar.big { height: 10px; }
+.bar > span { display: block; height: 100%; width: 0; border-radius: 999px; background: rgb(var(--brand)); transition: width .7s ease-out; }
+.bar > span.ok { background: rgb(var(--good)); }
+.bar > span.over { background: rgb(var(--warm)); }
+.link-btn { display: inline-flex; align-items: center; gap: 6px; border: 0; background: none; padding: 4px 2px; cursor: pointer; font-size: 13px; font-weight: 600; color: rgb(var(--muted)); }
+.link-btn:hover { color: rgb(var(--brand)); }
+
+.ex { padding: 20px; }
+@media (min-width: 640px) { .ex { padding: 24px; } }
+.ex-head { display: flex; align-items: center; gap: 12px; }
+.ex-title { flex: 1; min-width: 0; }
+.ex-eyebrow { color: rgb(var(--muted)); }
+.ex-title h3 { font-family: var(--display); font-size: 19px; font-weight: 700; line-height: 1.25; }
+.ex-badge { display: none; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; background: rgb(var(--good) / .12); color: rgb(var(--good)); }
+.ex-badge.on { display: inline-flex; }
+.ex-instr { margin-top: 10px; font-size: 14px; color: rgb(var(--muted)); }
+.ex-body { margin-top: 16px; }
+.ex-foot { margin-top: 20px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.ex-foot .btn:disabled { opacity: .4; cursor: not-allowed; }
+.fb { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 16px; font-size: 14px; font-weight: 600; animation: rise .35s cubic-bezier(.2,.7,.2,1) both; }
+.fb.good { background: rgb(var(--good) / .15); color: rgb(var(--good)); }
+.fb.ok { background: rgb(var(--warm) / .15); color: rgb(var(--warm)); }
+.fb.bad { background: rgb(var(--bad) / .1); color: rgb(var(--bad)); }
+
+.ex-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; counter-reset: q; }
+.ex-list.numbered > li { counter-increment: q; position: relative; padding-left: 30px; }
+.ex-list.numbered > li::before { content: counter(q) '.'; position: absolute; left: 0; top: 2px; font-weight: 700; color: rgb(var(--muted)); font-variant-numeric: tabular-nums; }
+
+.ex-select {
+  height: 42px; max-width: 100%; padding: 0 12px; border-radius: 12px; border: 2px solid rgb(var(--line));
+  background: rgb(var(--surface)); font-weight: 600; font-size: 15px; cursor: pointer; transition: border-color .2s;
+}
+.ex-select:focus { outline: none; border-color: rgb(var(--brand)); }
+.is-ok .ex-select { border-color: rgb(var(--good)); color: rgb(var(--good)); }
+.is-bad .ex-select { border-color: rgb(var(--bad)); color: rgb(var(--bad)); }
+.ex-select:disabled { cursor: default; opacity: 1; }
+
+.mk { display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; flex: none; color: #fff; vertical-align: middle; }
+.mk.ok { background: rgb(var(--good)); }
+.mk.no { background: rgb(var(--bad)); }
+.fix { display: block; width: 100%; font-size: 14px; color: rgb(var(--muted)); }
+.fix b { color: rgb(var(--good)); }
+
+/* Moslashtirish */
+.match-row { display: grid; gap: 8px; align-items: center; padding: 10px; border-radius: 16px; background: rgb(var(--sunk)); }
+@media (min-width: 640px) { .match-row { grid-template-columns: 1fr auto 1.4fr; } }
+.match-left { padding: 0 6px; font-weight: 700; }
+.match-arrow { display: none; color: rgb(var(--muted)); }
+@media (min-width: 640px) { .match-arrow { display: inline-flex; } }
+.match-pick { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.match-pick .ex-select { flex: 1; min-width: 0; width: 100%; }
+.match-row .fix { grid-column: 1 / -1; padding: 0 6px; }
+
+/* Bo‘shliq */
+.bank { display: flex; flex-wrap: wrap; gap: 6px; padding: 12px; margin-bottom: 16px; border-radius: 16px; border: 1px dashed rgb(var(--line)); background: rgb(var(--sunk) / .6); }
+.bank-chip { padding: 4px 10px; border-radius: 10px; background: rgb(var(--surface)); border: 1px solid rgb(var(--line)); font-size: 14px; font-weight: 600; }
+.gap-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; line-height: 1.6; font-size: 16px; }
+.gap-row .ex-select.gap { min-width: 200px; }
+
+/* Variantli tugmalar */
+.opt {
+  min-height: 42px; padding: 8px 16px; border-radius: 16px; border: 2px solid rgb(var(--line)); background: rgb(var(--surface));
+  font-weight: 600; font-size: 15px; text-align: left; cursor: pointer; transition: border-color .2s, background .2s, color .2s;
+}
+.opt:hover:not(:disabled) { border-color: rgb(var(--brand) / .6); }
+.opt[aria-checked="true"] { border-color: rgb(var(--brand)); background: rgb(var(--brand) / .1); color: rgb(var(--brand)); }
+.opt b { font-family: var(--mono); font-size: 12px; margin-right: 6px; opacity: .7; }
+.opt.right { border-color: rgb(var(--good)); background: rgb(var(--good) / .15); color: rgb(var(--good)); }
+.opt.wrong { border-color: rgb(var(--bad)); background: rgb(var(--bad) / .1); color: rgb(var(--bad)); text-decoration: line-through; }
+.opt:disabled { cursor: default; }
+.tf-row { display: grid; gap: 8px; }
+@media (min-width: 760px) { .tf-row { grid-template-columns: 1fr auto; align-items: center; } .tf-row .fix { grid-column: 1 / -1; } }
+.tf-btns { display: flex; align-items: center; gap: 8px; }
+.mcq-row .q { font-weight: 600; }
+.mcq-row .opts { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* Iborani topish */
+.tokens { display: flex; flex-wrap: wrap; gap: 4px; line-height: 1.4; }
+.tok { border: 0; padding: 4px 6px; border-radius: 8px; background: transparent; font-size: 16px; cursor: pointer; transition: background .15s; }
+.tok:hover:not(:disabled) { background: rgb(var(--sunk)); }
+.tok[aria-pressed="true"] { background: rgb(var(--brand)); color: rgb(var(--onbrand)); }
+.tok.right { background: rgb(var(--good) / .18); color: rgb(var(--good)); font-weight: 700; box-shadow: inset 0 -2px 0 rgb(var(--good)); }
+.tok.wrong { background: rgb(var(--bad) / .12); color: rgb(var(--bad)); text-decoration: line-through; }
+.tok:disabled { cursor: default; }
+.hunt-meaning { margin-top: 10px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: rgb(var(--muted)); }
+.hunt-meaning .ex-select { flex: 1; min-width: 220px; color: rgb(var(--ink)); }
+.hunt-row .fix { margin-top: 6px; }
+
+/* Yozma ishlar */
+.sent-row { padding: 12px; border-radius: 16px; background: rgb(var(--sunk) / .7); }
+.sent-row.is-ok { background: rgb(var(--good) / .08); }
+.sent-top { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.sent-top .link-btn { margin-left: auto; }
+.ex-text {
+  width: 100%; resize: vertical; padding: 10px 14px; border-radius: 14px; border: 2px solid rgb(var(--line));
+  background: rgb(var(--surface)); font: inherit; font-size: 16px; line-height: 1.55; transition: border-color .2s;
+}
+.ex-text:focus { outline: none; border-color: rgb(var(--brand)); }
+.ex-text.essay { min-height: 220px; }
+.example { margin-top: 8px; padding: 8px 12px; border-radius: 12px; background: rgb(var(--warm) / .12); font-size: 14px; }
+.write-foot { margin-top: 14px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 14px; }
+.spacer { flex: 1; }
+.hint { margin-top: 8px; font-size: 12px; color: rgb(var(--muted)); }
+.ex-img { width: 100%; border-radius: 18px; border: 1px solid rgb(var(--line)); margin-bottom: 16px; }
+.prompt { margin: 0 0 14px; display: flex; gap: 10px; align-items: flex-start; padding: 14px 16px; border-radius: 16px; background: rgb(var(--violet) / .1); color: rgb(var(--ink)); font-family: var(--display); font-size: 18px; font-weight: 700; line-height: 1.35; }
+.prompt .ic { color: rgb(var(--violet)); margin-top: 3px; }
+.meter { margin-top: 12px; display: grid; gap: 6px; }
+.meter-row { display: flex; justify-content: space-between; gap: 8px; font-size: 14px; }
+.found { margin-top: 12px; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 14px; }
+.found-list { display: inline-flex; flex-wrap: wrap; gap: 6px; }
+.found .pill { font-family: var(--sans); font-weight: 600; font-size: 12px; background: rgb(var(--good) / .12); color: rgb(var(--good)); }
+
+/* Kartochkadagi progress */
+.cprog { position: relative; margin-top: 14px; display: grid; gap: 6px; font-size: 12px; font-weight: 600; color: rgb(var(--muted)); }
+.cprog-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.pill.soon.live { background: rgb(var(--good) / .12); color: rgb(var(--good)); border-color: rgb(var(--good) / .5); }
+
+/* Hikoyadagi bosiladigan iboralar */
+.idi {
+  display: inline; padding: 0 .25em; border: 0; border-radius: .35em; cursor: pointer; font: inherit; font-weight: 700;
+  background: color-mix(in srgb, var(--k, rgb(var(--brand))) 14%, transparent); color: var(--k, rgb(var(--brand)));
+  transition: background .2s;
+}
+.idi:hover, .idi[aria-expanded="true"] { background: color-mix(in srgb, var(--k, rgb(var(--brand))) 26%, transparent); }
+.idi-tip {
+  display: inline-block; margin: 2px 4px; padding: 2px 10px; border-radius: 10px; font-size: 14px; line-height: 1.5;
+  background: rgb(var(--navy)); color: #fff; animation: rise .25s cubic-bezier(.2,.7,.2,1) both;
+}
+
+/* Tuzatishlar */
+[hidden] { display: none !important; }
+.gap-row { display: block; line-height: 2.3; }
+.gap-row .ex-select.gap { display: inline-block; vertical-align: middle; margin: 2px 4px; min-width: 0; width: auto; max-width: 100%; }
+.gap-row .mk { margin-left: 4px; }
+.gap-row .fix { line-height: 1.5; margin-top: 2px; }
+.tokens { display: block; line-height: 2.1; }
+.tok { padding: 2px 4px; margin: 0; }
