@@ -221,6 +221,10 @@ main:focus { outline: none; }
 .type-art { position: absolute; right: -6%; top: 2%; width: 74%; }
 .type-art svg { width: 100%; height: auto; }
 .type-num { position: absolute; left: 18px; bottom: 6px; font-size: clamp(64px, 8vw, 104px); font-weight: 300; letter-spacing: -.05em; line-height: 1; }
+.type-ex { position: absolute; left: 16px; top: 54px; z-index: 2; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; max-width: 62%; }
+.type-ex span { padding: 5px 11px; border-radius: 999px; background: #fff; color: var(--ink); font-size: 13px; font-weight: 500; line-height: 1.25; white-space: nowrap; box-shadow: 0 4px 12px rgb(0 0 0 / .12); }
+.type-ex span:nth-child(odd) { transform: rotate(-2deg); }
+.type-ex span:nth-child(even) { transform: rotate(2deg) translateX(8px); }
 .type-go { position: absolute; right: 16px; bottom: 16px; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: rgb(255 255 255 / .25); }
 
 /* ---------- Katta jumla ---------- */
@@ -594,9 +598,11 @@ button.type[aria-pressed="true"] .type-card { box-shadow: 0 0 0 4px #fff, 0 0 0 
 
 @media (max-width: 760px) {
   .layer.y, .layer.p { display: none; }
-  .type-card { aspect-ratio: 1 / .62; }
+  .type-card { aspect-ratio: 1 / .74; }
   .type-art { width: 52%; top: 4%; right: 2%; }
   .type-num { font-size: 64px; }
+  .type-ex { top: 50px; gap: 5px; }
+  .type-ex span { font-size: 12.5px; padding: 4px 10px; }
   .hero-title { font-size: clamp(36px, 10vw, 44px); }
 }
 

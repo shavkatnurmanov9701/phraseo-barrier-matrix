@@ -178,9 +178,9 @@ function viewHome() {
   const kindStats = ['idiom', 'phrasal', 'phrase'].map((k) => ({ k, lessons: LESSONS.filter((l) => l.kind === k).length, entries: MERGED.filter((e) => e.kind === k).length }));
   const maxEntries = Math.max(...kindStats.map((x) => x.entries));
   const typeCards = [
-    { k: 'idiom', cls: 'c-orange', art: cakeIcon('ci') },
-    { k: 'phrasal', cls: 'c-pink', art: planeIcon('pi') },
-    { k: 'phrase', cls: 'c-violet', art: puzzleIcon('zi') },
+    { k: 'idiom', cls: 'c-orange', art: cakeIcon('ci'), ex: ['A piece of cake', 'Break the ice', 'Over the moon', 'Under the weather'] },
+    { k: 'phrasal', cls: 'c-pink', art: planeIcon('pi'), ex: ['Set off', 'Put off', 'Come up with', 'Hold back'] },
+    { k: 'phrase', cls: 'c-violet', art: puzzleIcon('zi'), ex: ['Spend quality time', 'Make fun of', 'Stay united', 'Take a deep breath'] },
   ];
   const statement = pick(STATEMENT).split(/(\{\w+\})/).map((part, i) => {
     const m = part.match(/^\{(\w+)\}$/);
@@ -237,6 +237,7 @@ function viewHome() {
           <span class="type-card ${c.cls}">
             <span class="type-pill">${esc(kindLabel(c.k))}</span>
             <span class="type-art">${c.art}</span>
+            <span class="type-ex" lang="en">${c.ex.map((x) => `<span>${esc(x)}</span>`).join('')}</span>
             <span class="type-num">${pad2(i + 1)}</span>
             <span class="type-go" aria-hidden="true">${icon('arrow-right', 16)}</span>
           </span>
