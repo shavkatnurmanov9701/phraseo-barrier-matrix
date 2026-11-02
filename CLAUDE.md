@@ -41,7 +41,7 @@ Every push to `main` goes live in 1–2 minutes, so test locally first (`python3
 
 ## Domain
 - phrasebar.uz (registrar PS Cloud, DNS zone on ns1/ns2.pscloud.uz): 4 A records → GitHub Pages IPs, www CNAME → shavkatnurmanov9701.github.io.
-  Custom domain was removed from Pages on 2026-11-01 until DNS propagates; the owner re-adds it in Settings → Pages.
+  Custom domain is live (CNAME file in repo); HTTPS certificate issued and “Enforce HTTPS” turned on (2026-11-02): http → https works.
 
 ## Stages
 1. ✅ Structure and design (EnNote style)
