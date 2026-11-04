@@ -585,13 +585,13 @@ export const LESSONS = [
     homework: ['Personal writing: “A Time I Forgot Something Important” (80–100 words)'],
   },
   {
-    n: 15, book: 'Story 16', page: 113, kind: 'idiom',
+    n: 16, book: 'Story 16', page: 113, kind: 'idiom',
     title: 'Penny’s Penny-Pinching Problem',
     about: {
       uz: 'Ofisdagi eng xasis xodim Penni va yengillashib qolgan xayriya qutisi sirini hamkasbi Sara ochadi.',
       en: 'Tight-fisted Penny, a charity jar that feels too light, and a colleague who takes the bull by the horns.',
     },
-    poster: 'img/posters/15.webp',
+    poster: 'img/posters/16.webp',
     glossary: [
       ['A piece of work', 'a difficult or annoying person; someone hard to deal with'],
       ['Hit the ground running', 'to start something successfully and enthusiastically'],
@@ -630,13 +630,13 @@ export const LESSONS = [
     homework: ['Personal writing: “A Time Honesty Was Important” (80–100 words)', 'Role play: the confrontation scene'],
   },
   {
-    n: 16, book: 'Story 17', page: 122, kind: 'idiom',
+    n: 17, book: 'Story 17', page: 122, kind: 'idiom',
     title: 'The Case of the Counterfeit Canary',
     about: {
       uz: 'Ledi Plamtrining qimmatbaho “Oltin qushcha”si o‘g‘irlanadi. Professor Finch ishning tagiga yetishga kirishadi.',
       en: 'Lady Plumtree’s priceless Golden Songbird is stolen, and Professor Finch sets out to get to the bottom of it.',
     },
-    poster: 'img/posters/16.webp',
+    poster: 'img/posters/17.webp',
     glossary: [
       ['Dime-store imitation', 'a cheap, low-quality copy'],
       ['Beside herself', 'overwhelmed with emotion, especially distress'],
@@ -663,13 +663,13 @@ export const LESSONS = [
     homework: ['Personal writing: “A Mystery I Would Like to Solve” (80–100 words)', 'Role play: detective investigation'],
   },
   {
-    n: 17, book: 'Story 18', page: 130, kind: 'idiom',
+    n: 18, book: 'Story 18', page: 130, kind: 'idiom',
     title: 'The Curious Inheritance of Barnaby Buttonwood',
     about: {
       uz: 'Oddiy kotib Barnabi ixtirochi amakisidan jumboqlarga to‘la qasrni meros qilib oladi.',
       en: 'Ordinary clerk Barnaby inherits his inventor great-uncle’s mansion — full of riddles and secrets.',
     },
-    poster: 'img/posters/17.webp',
+    poster: 'img/posters/18.webp',
     glossary: [
       ['Upside down', 'in a state of confusion or disorder'],
       ['A fish out of water', 'feeling uncomfortable or awkward in a new situation'],
@@ -698,13 +698,13 @@ export const LESSONS = [
     homework: ['Personal writing: “A Mystery I Would Love to Solve” (80–100 words)', 'Role play: the hidden inheritance'],
   },
   {
-    n: 18, book: 'Story 19', page: 137, kind: 'idiom',
+    n: 19, book: 'Story 19', page: 137, kind: 'idiom',
     title: 'The Peculiar Predicaments of Penelope Plum’s Portraits',
     about: {
       uz: 'San’atshunos Penelopa va detektiv Finch vaqt o‘tishi bilan o‘zgarib boradigan sirli portretlarni tekshiradi.',
       en: 'Art critic Penelope and Detective Finch investigate portraits that seem to change over time.',
     },
-    poster: 'img/posters/18.webp',
+    poster: 'img/posters/19.webp',
     glossary: [
       ['Sharp as a tack', 'very intelligent and perceptive'],
       ['Watching her', 'giving the impression of being observed'],
@@ -730,13 +730,13 @@ export const LESSONS = [
     homework: ['Personal writing: “A Strange Mystery I Would Like to Solve” (80–100 words)'],
   },
   {
-    n: 19, book: 'Story 20', page: 144, kind: 'idiom',
+    n: 20, book: 'Story 20', page: 144, kind: 'idiom',
     title: 'The Bewildering Bargain of Beatrice Bellweather’s Books',
     about: {
       uz: 'Antikvar kitobfurush Beatris sirli kolleksioner — “Bibliofil”ning jumboqli sinovini qabul qiladi.',
       en: 'Antiquarian bookseller Beatrice takes on a puzzling challenge from a mysterious collector, the Bibliophile.',
     },
-    poster: 'img/posters/19.webp',
+    poster: 'img/posters/20.webp',
     glossary: [
       ['A fly in the ointment', 'a minor problem that spoils something'],
       ['In a quandary', 'in a state of uncertainty or doubt'],

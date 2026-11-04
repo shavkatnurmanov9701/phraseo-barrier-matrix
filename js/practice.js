@@ -11,6 +11,19 @@ const wordsOf = (s) => (s.trim().match(/[A-Za-z0-9’'-]+/g) || []);
 
 /* ---------- Saqlash ---------- */
 const KEY = 'pbm-progress';
+// 2026-11-04: dars raqamlari kitobdagidek bo‘ldi (15 → 16, …, 19 → 20). Eski natijalarni bir marta ko‘chiramiz.
+(function migrateNumbers() {
+  try {
+    if (localStorage.getItem('pbm-numbering') === 'book') return;
+    const all = JSON.parse(localStorage.getItem(KEY) || '{}');
+    const moved = {};
+    Object.entries(all).forEach(([k, v]) => { const n = Number(k); moved[n >= 15 && n <= 19 ? n + 1 : n] = v; });
+    localStorage.setItem(KEY, JSON.stringify(moved));
+    const drafts = Object.keys(localStorage).filter((k) => /^pbm-w-(1[5-9])-/.test(k)).sort().reverse();
+    drafts.forEach((k) => { const n = Number(k.split('-')[2]); const nk = k.replace(`pbm-w-${n}-`, `pbm-w-${n + 1}-`); localStorage.setItem(nk, localStorage.getItem(k)); localStorage.removeItem(k); });
+    localStorage.setItem('pbm-numbering', 'book');
+  } catch { /* storage unavailable */ }
+}());
 function readAll() { try { return JSON.parse(localStorage.getItem(KEY) || '{}'); } catch { return {}; } }
 function writeAll(v) { try { localStorage.setItem(KEY, JSON.stringify(v)); } catch { /* storage unavailable */ } }
 export function lessonProgress(n) { return readAll()[n] || {}; }

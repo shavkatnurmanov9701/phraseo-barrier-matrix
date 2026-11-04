@@ -78,6 +78,7 @@ const STRINGS = {
     'lesson.prev': 'Oldingi dars',
     'lesson.next': 'Keyingi dars',
     'lesson.notFound': 'Bunday dars yo‘q. Darslar ro‘yxatidan tanlang.',
+    'lesson.no15': 'Kitobda 15-hikoya yo‘q: 14-darsdan keyin 16-dars keladi.',
 
     'glossary.eyebrow': 'Lug‘at',
     'glossary.title': 'Barcha iboralar',
@@ -250,6 +251,7 @@ const STRINGS = {
     'lesson.prev': 'Previous lesson',
     'lesson.next': 'Next lesson',
     'lesson.notFound': 'There is no such lesson. Pick one from the list.',
+    'lesson.no15': 'The book has no Story 15: lesson 14 is followed by lesson 16.',
 
     'glossary.eyebrow': 'Glossary',
     'glossary.title': 'Every expression',

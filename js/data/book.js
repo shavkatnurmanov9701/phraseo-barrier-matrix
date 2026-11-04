@@ -67,7 +67,7 @@ export const BOOK = {
 // Bosh sahifadagi "to'siq" — so'zma-so'z ma'no va asl ma'no
 export const HERO_IDIOMS = [
   { en: 'Bite the bullet', literal: 'o‘qni tishlamoq', uz: 'qiyin yoki yoqimsiz ishga jur’at bilan kirishmoq', meaning: 'to do something difficult that you’ve been avoiding', lesson: 1 },
-  { en: 'Spill the beans', literal: 'loviyani to‘kib yubormoq', uz: 'sirni oshkor qilib qo‘ymoq', meaning: 'to reveal a secret', lesson: 15 },
+  { en: 'Spill the beans', literal: 'loviyani to‘kib yubormoq', uz: 'sirni oshkor qilib qo‘ymoq', meaning: 'to reveal a secret', lesson: 16 },
   { en: 'On cloud nine', literal: 'to‘qqizinchi bulut ustida', uz: 'o‘ta baxtiyor, boshi ko‘kka yetgan', meaning: 'feeling extremely happy', lesson: 9 },
   { en: 'Burn the candle at both ends', literal: 'shamni ikki uchidan yoqmoq', uz: 'dam olmay, o‘zini holdan toydirib ishlamoq', meaning: 'to overwork yourself, staying up late and getting up early', lesson: 6 },
   { en: 'Break the ice', literal: 'muzni sindirmoq', uz: 'tanglikni yumshatib, suhbatni boshlab yubormoq', meaning: 'to make people feel comfortable at the start', lesson: 2 },

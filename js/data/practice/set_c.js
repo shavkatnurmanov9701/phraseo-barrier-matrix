@@ -1,4 +1,4 @@
-// 14–19-darslar: interaktiv mashqlar (kitob, 106–150-betlar).
+// 14, 16–20-darslar: interaktiv mashqlar (kitob, 106–150-betlar). Raqamlar kitobdagidek: 15-hikoya kitobda yo‘q.
 import { warmup, match, gap, rewrite, tf, tfKey, mcq, abc, INSTR } from './kit.js';
 
 const withKey = (qs, key) => { const a = abc(key); return qs.map(([q, o], i) => [q, o, a[i]]); };
@@ -75,9 +75,9 @@ export default {
     ],
   },
 
-  /* ---------- 15. Penny’s Penny-Pinching Problem (kitobda Story 16) ---------- */
-  15: {
-    warmup: warmup(15, ['Tight-fisted', 'Spill the beans', 'Make ends meet', 'Turn a blind eye', 'A wake-up call']),
+  /* ---------- 16. Penny’s Penny-Pinching Problem ---------- */
+  16: {
+    warmup: warmup(16, ['Tight-fisted', 'Spill the beans', 'Make ends meet', 'Turn a blind eye', 'A wake-up call']),
     exercises: [
       match('a1', 'Idiom Identification & Meaning Match', nums(
         ['Piece of work', 'Hit the ground running', 'Shake things up', 'Go-getter', 'Burning the midnight oil', 'Tight-fisted', 'Spill the beans', 'Take the bull by the horns', 'Drive someone up the wall', 'Beat around the bush', 'Make ends meet', 'Hard pill to swallow'],
@@ -107,9 +107,9 @@ export default {
     ],
   },
 
-  /* ---------- 16. The Case of the Counterfeit Canary (kitobda Story 17) ---------- */
-  16: {
-    warmup: warmup(16, ['Beside herself', 'Cheap knock-off', 'Get to the bottom of something', 'Bark up the wrong tree', 'Click into place']),
+  /* ---------- 17. The Case of the Counterfeit Canary ---------- */
+  17: {
+    warmup: warmup(17, ['Beside herself', 'Cheap knock-off', 'Get to the bottom of something', 'Bark up the wrong tree', 'Click into place']),
     exercises: [
       match('a1', 'Idiom Hunt: Meanings', [
         ['Sharp as a tack', 'very intelligent'],
@@ -149,9 +149,9 @@ export default {
     ],
   },
 
-  /* ---------- 17. The Curious Inheritance of Barnaby Buttonwood (kitobda Story 18) ---------- */
-  17: {
-    warmup: warmup(17, ['Upside down', 'Out of your depth', 'Step into your own shoes', 'Sole heir', 'Hidden vault']),
+  /* ---------- 18. The Curious Inheritance of Barnaby Buttonwood ---------- */
+  18: {
+    warmup: warmup(18, ['Upside down', 'Out of your depth', 'Step into your own shoes', 'Sole heir', 'Hidden vault']),
     exercises: [
       match('a1', 'Vocabulary & Phrase Matching', [
         ['Sole heir', 'A person who receives everything after someone dies'],
@@ -210,9 +210,9 @@ export default {
     ],
   },
 
-  /* ---------- 18. The Peculiar Predicaments of Penelope Plum’s Portraits (kitobda Story 19) ---------- */
-  18: {
-    warmup: warmup(18, ['Sharp as a tack', 'Leap off the canvas', 'A wolf in sheep’s clothing', 'Look beneath the surface', 'Uncanny resemblance']),
+  /* ---------- 19. The Peculiar Predicaments of Penelope Plum’s Portraits ---------- */
+  19: {
+    warmup: warmup(19, ['Sharp as a tack', 'Leap off the canvas', 'A wolf in sheep’s clothing', 'Look beneath the surface', 'Uncanny resemblance']),
     exercises: [
       match('a1', 'Vocabulary & Idiom Matching', [
         ['Sharp as a tack', 'Extremely intelligent'],
@@ -260,9 +260,9 @@ export default {
     ],
   },
 
-  /* ---------- 19. The Bewildering Bargain of Beatrice Bellweather’s Books (kitobda Story 20) ---------- */
-  19: {
-    warmup: warmup(19, ['A fly in the ointment', 'In a quandary', 'Think outside the box', 'Like a dog with a bone', 'Land on your feet']),
+  /* ---------- 20. The Bewildering Bargain of Beatrice Bellweather’s Books ---------- */
+  20: {
+    warmup: warmup(20, ['A fly in the ointment', 'In a quandary', 'Think outside the box', 'Like a dog with a bone', 'Land on your feet']),
     exercises: [
       match('a1', 'Vocabulary & Idiom Matching', [
         ['Fly in the ointment', 'A small problem that spoils a situation'],

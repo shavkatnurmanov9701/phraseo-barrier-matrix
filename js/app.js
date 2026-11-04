@@ -486,9 +486,11 @@ function bindLessons() {
 /* ---------- Bitta dars ---------- */
 function viewLesson(n) {
   const l = LESSONS.find((x) => x.n === n);
-  if (!l) return `<section class="wrap page notfound"><h1 class="display h2">${t('lesson.notFound')}</h1><a class="btn violet" href="#/darslar">${t('all.lessons')}</a></section>`;
-  const prev = LESSONS.find((x) => x.n === n - 1);
-  const next = LESSONS.find((x) => x.n === n + 1);
+  if (!l) return `<section class="wrap page notfound"><h1 class="display h2">${t(n === 15 ? 'lesson.no15' : 'lesson.notFound')}</h1><a class="btn violet" href="${n === 15 ? lessonUrl(16) : '#/darslar'}">${n === 15 ? `${t('lesson.next')} · 16` : t('all.lessons')}</a></section>`;
+  // Raqamlar kitobdagidek (15-hikoya yo‘q), shuning uchun qo‘shni dars ro‘yxatdagi o‘rni bo‘yicha olinadi
+  const idx = LESSONS.indexOf(l);
+  const prev = LESSONS[idx - 1];
+  const next = LESSONS[idx + 1];
   const vid = youTubeId(l.video);
   const isShort = l.video?.includes('/shorts/');
   const mark = highlighter(l.glossary);

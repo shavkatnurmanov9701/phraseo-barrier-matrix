@@ -25,7 +25,9 @@ Every push to `main` goes live in 1–2 minutes, so test locally first (`python3
 - Previous EnNote-style design was replaced at the owner's request (“EnNote bilan bir xil bo‘lib qoldi”).
 
 ## Content
-- `js/data/lessons.js`: 19 lessons. Site numbers 1–19; the book skips Story 15, so each lesson keeps `book` + `page`.
+- `js/data/lessons.js`: 19 lessons, numbered **as in the book** (owner 2026-11-04): 1–14, 16–20 — the book has no Story 15
+  (`#/dars/15` explains this and links to 16). Prev/next go by list order. Posters/warm-up images are named by lesson number.
+  Old stored progress for 15–19 is moved to 16–20 once (`pbm-numbering` flag in `practice.js`).
 - 17 story texts are images in the book (`img/posters/NN.webp`); stories 5 and 7 are text in `lessons.js`.
 - `js/data/book.js`: annotation (uz/en/ru), introduction, methodology, hero idioms (Uzbek literal + meaning).
 
@@ -46,7 +48,7 @@ Every push to `main` goes live in 1–2 minutes, so test locally first (`python3
 ## Stages
 1. ✅ Structure and design (EnNote style)
 2. ✅ Pilot lesson 1: interactive exercises (`js/practice.js`, data in `js/data/practice/l01.js`, registry `index.js`)
-3. ✅ All 19 lessons interactive (2026-11-01): data in `js/data/practice/set_a.js` (2–7), `set_b.js` (8–13), `set_c.js` (14–19),
+3. ✅ All 19 lessons interactive (2026-11-01): data in `js/data/practice/set_a.js` (2–7), `set_b.js` (8–13), `set_c.js` (14, 16–20),
    helpers in `kit.js`. Warm-up = book warm-up picture (`img/warmup/NN.webp`) + “Guess the Meaning” match (5 glossary items).
    Extra kinds: `reorder` (tap words to build a sentence), `match` with `ordered: true` (number events), gap items may carry a note
    (used for “rewrite” tasks). Book answer-key errors were fixed and listed in comments next to the data.
