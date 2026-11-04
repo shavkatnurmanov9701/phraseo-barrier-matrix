@@ -1,7 +1,9 @@
 # Phraseo-Barrier Matrix — notes for Claude
 
 Companion website for the study guide “Phraseo-Barrier Matrix” (Jumayeva S.M., UzSWLU, 2026): English idioms,
-phrasal verbs and collocations taught through 19 stories. Static site (vanilla HTML/CSS/JS, hash router), no build step.
+phrasal verbs and collocations taught through the book's stories.
+The site says **“20 ta hikoya”** everywhere (owner 2026-11-04: match the book's numbering; there are really 19, Story 15 is missing);
+the count on the big-numbers block is `BOOK_STORIES` (highest lesson number) in `app.js`. Static site (vanilla HTML/CSS/JS, hash router), no build step.
 Hosting: GitHub Pages from `main` / root → https://shavkatnurmanov9701.github.io/phraseo-barrier-matrix/
 Every push to `main` goes live in 1–2 minutes, so test locally first (`python3 -m http.server`).
 

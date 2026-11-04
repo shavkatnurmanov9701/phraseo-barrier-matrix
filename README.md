@@ -3,7 +3,7 @@
 **“Phraseo-Barrier Matrix”** o‘quv qo‘llanmasining elektron hamrohi.
 Muallif: **Jumayeva Sadbarg Mirolimovna**. O‘zbekiston davlat jahon tillari universiteti, Ingliz tili 3-fakulteti, 2026.
 
-Sayt 1-kurs talabalariga (2-semestr) ingliz idiomalari, frazali fe’llar va kollokatsiyalarni 19 ta hikoya orqali o‘rganishda yordam beradi.
+Sayt 1-kurs talabalariga (2-semestr) ingliz idiomalari, frazali fe’llar va kollokatsiyalarni 20 ta hikoya orqali o‘rganishda yordam beradi.
 
 ## Tuzilma
 
@@ -17,7 +17,7 @@ js/practice.js        — interaktiv mashqlar mexanizmi
 js/data/practice/     — darslar bo‘yicha mashqlar (l01.js, set_a/b/c.js, kit.js)
 js/app.js             — sahifalar va marshrutlash
 js/i18n.js            — interfeys matnlari (o‘zbekcha / inglizcha)
-js/data/lessons.js    — 19 ta dars: lug‘at, mashqlar, video, uy vazifasi
+js/data/lessons.js    — darslar (kitobdagidek 1–14, 16–20): lug‘at, mashqlar, video, uy vazifasi
 js/data/book.js       — kitob haqida: annotatsiya, kirish, metodika
 img/                  — muqova va kitobdagi hikoya sahifalari
 fonts/                — shrift fayllari
@@ -30,7 +30,7 @@ Sayt hech qanday yig‘ish (build) jarayonisiz ishlaydi. Oddiy statik fayllar, s
 | Manzil | Sahifa |
 |---|---|
 | `#/` | Bosh sahifa: iboraning so‘zma-so‘z va asl ma’nosi, darslar matritsasi |
-| `#/darslar` | 19 ta dars, tur bo‘yicha filtr |
+| `#/darslar` | Darslar, tur bo‘yicha filtr |
 | `#/dars/5` | Bitta dars: maqsadlar, hikoya, lug‘at, mashqlar, video, uy vazifasi |
 | `#/lugat` | Umumiy lug‘at: qidiruv, dars va tur bo‘yicha filtr |
 | `#/kitob` | Kitob haqida: annotatsiya (3 tilda), kirish, metodika |

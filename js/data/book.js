@@ -89,8 +89,8 @@ export const LESSON_FLOW = [
 
 // Bosh sahifadagi katta jumla: {moon} {heart} {ice} — matn ichidagi stikerlar
 export const STATEMENT = {
-  uz: 'Idioma so‘zlari bir narsani {moon} aytadi, ma’nosi esa butunlay boshqa narsani {heart} anglatadi. Phrasebar kitobdagi 19 ta hikoya orqali shu to‘siqni {ice} yengishga yordam beradi.',
-  en: 'An idiom’s words say one thing {moon} while its meaning says something else entirely {heart}. Phrasebar uses the 19 stories of the book to help you break through that barrier {ice}.',
+  uz: 'Idioma so‘zlari bir narsani {moon} aytadi, ma’nosi esa butunlay boshqa narsani {heart} anglatadi. Phrasebar kitobdagi 20 ta hikoya orqali shu to‘siqni {ice} yengishga yordam beradi.',
+  en: 'An idiom’s words say one thing {moon} while its meaning says something else entirely {heart}. Phrasebar uses the 20 stories of the book to help you break through that barrier {ice}.',
 };
 
 // Ko‘p beriladigan savollar

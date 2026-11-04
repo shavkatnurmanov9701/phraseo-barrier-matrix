@@ -18,6 +18,8 @@ const lessonUrl = (n) => `#/dars/${n}`;
 const kindLabel = (k) => pick(KINDS[k]);
 const pad2 = (n) => String(n).padStart(2, '0');
 // Interaktiv darslarda mashqlar soni amaldagi mashqlardan olinadi
+// Kitobdagi hikoyalar soni kitob raqamlashiga ko‘ra (oxirgi raqam, 20) — egasining tanlovi, 2026-11-04
+const BOOK_STORIES = Math.max(...LESSONS.map((l) => l.n));
 const actCount = (l) => (PRACTICE[l.n] ? PRACTICE[l.n].exercises.length : l.activities.length);
 const TOTAL_ACTS = LESSONS.reduce((n, l) => n + actCount(l), 0);
 
@@ -188,7 +190,7 @@ function viewHome() {
     return part.split(/(\s+)/).map((w) => (w.trim() ? `<span class="w">${esc(w)}</span>` : w)).join('');
   }).join('');
   const stats = [
-    { n: LESSONS.length, k: 1, s: 'cake', bg: '#FFE8DC' },
+    { n: BOOK_STORIES, k: 1, s: 'cake', bg: '#FFE8DC' },
     { n: MERGED.length, k: 2, s: 'heart', bg: '#FFE3F0' },
     { n: TOTAL_ACTS, k: 3, s: 'ice', bg: '#E2F6FC' },
     { n: 3, k: 4, s: 'moon', bg: '#FFF4D1' },
@@ -261,7 +263,7 @@ function viewHome() {
         <div class="mix">
           <div class="mix-tiles">
             <div class="tile-y"><small>${t('stat.entries')}</small><b class="tnum">+${MERGED.length}</b></div>
-            <div class="tile-p"><small>${t('stat.lessons')}</small><b class="tnum">+${LESSONS.length}</b></div>
+            <div class="tile-p"><small>${t('stat.lessons')}</small><b class="tnum">+${BOOK_STORIES}</b></div>
           </div>
           <ul class="bars">
             ${kindStats.map((x) => `<li data-kind="${x.k}"><span class="bar-fill" style="--w:${Math.round((x.entries / maxEntries) * 100)}%"><b class="tnum">${x.entries}</b></span><span class="bar-label">${kindLabel(x.k)}</span></li>`).join('')}

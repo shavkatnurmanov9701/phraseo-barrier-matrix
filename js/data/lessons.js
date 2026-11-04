@@ -2,7 +2,7 @@
 // Manba: Jumayeva S.M. "Phraseo-Barrier Matrix" o'quv qo'llanmasi (Toshkent, 2026).
 //
 // Har bir dars:
-//   n        — saytdagi tartib raqami (1–19)
+//   n        — dars raqami, kitobdagidek (1–14, 16–20; kitobda 15-hikoya yo‘q)
 //   book     — kitobdagi nomi ("Story 16" va h.k.), page — kitobdagi sahifa
 //   kind     — 'idiom' | 'phrasal' | 'phrase' (dars lug'atining asosiy turi)
 //   about    — qisqa mazmun { uz, en }
